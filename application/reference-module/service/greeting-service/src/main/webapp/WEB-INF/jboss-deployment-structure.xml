@@ -1,0 +1,10 @@
+<jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.0">
+	<deployment>
+		<dependencies>
+			<module name="com.virtualparadigm.common" export="true" />
+			<module name="com.virtualparadigm.provider" export="true" />
+			<module name="com.virtualparadigm.kernel" export="true" />
+		</dependencies>
+	</deployment>
+</jboss-deployment-structure>  
+

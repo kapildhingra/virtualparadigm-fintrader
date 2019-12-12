@@ -1,0 +1,12 @@
+
+
+reference app:
+	
+	unit test coverage with reporting
+	annotated with openapi/swagger
+	secured with spring security/oath with functional local env
+	CI/CD in gitlab to AWS
+
+
+
+
