@@ -1,0 +1,146 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.virtualparadigm.fintrader.app.module.reference.service</groupId>
+		<artifactId>parent-pom</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+	<!-- groupId>com.virtualparadigm.fintrader.app.reference.service</groupId -->
+	<artifactId>greeting-service</artifactId>
+	<name>${project.artifactId}</name>
+	
+	<properties>
+		<overlay.dir>${project.basedir.absolutePath}/target/overlay</overlay.dir>
+		<config.dir>${project.basedir.absolutePath}/src/main/config</config.dir>
+	</properties>	
+
+	<dependencies>
+
+
+		<dependency>
+			<groupId>com.virtualparadigm.comp.common</groupId>
+			<artifactId>vparadigm-common</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.virtualparadigm.fintrader.app.module.reference.shared</groupId>
+			<artifactId>greeting-data</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.gmavenplus</groupId>
+				<artifactId>gmavenplus-plugin</artifactId>
+				<version>1.6.2</version>
+				<executions>
+					<execution>
+						<id>stage-docker-image</id>
+						<phase>package</phase>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<scripts>
+						<script>
+							String projectBaseDirPath = "$project.basedir".replace("\\", "/");
+							String targetDirPath = projectBaseDirPath + "/target";
+							String jarFilePath = targetDirPath + "/" + "$project.artifactId" + "-" + "$project.version" + ".jar"
+							String overlayDirPath = targetDirPath + "/overlay";
+							String appDirPath = overlayDirPath + "/opt/app";
+							String configDirPath = projectBaseDirPath + "/src/main/config";
+							
+							def overlayDir = new File(projectBaseDirPath + "/target/overlay").mkdirs();
+							
+							AntBuilder antBuilder = new AntBuilder();
+							antBuilder.copy(file: jarFilePath, tofile: appDirPath + "/app.jar")
+							antBuilder.copy(todir: appDirPath) {
+							    fileset(dir: configDirPath)
+							}
+							
+						</script>
+					</scripts>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.codehaus.groovy</groupId>
+						<artifactId>groovy-all</artifactId>
+						<version>2.5.8</version>
+						<scope>runtime</scope>
+						<type>pom</type>
+					</dependency>
+				</dependencies>
+		
+			</plugin>
+
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<!-- version>1.6.0</version -->
+				<executions>
+					<execution>
+						<id>docker-package</id>
+						<phase>package</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>docker</executable>
+							<workingDirectory>${project.basedir}</workingDirectory>
+							<arguments>
+								<argument>build</argument>
+								<argument>.</argument>
+								<argument>--no-cache</argument>
+								<argument>-t</argument>
+								<argument>${project.groupId}/${project.artifactId}</argument>
+								<argument>--build-arg</argument>
+								<argument>JAR_FILE=${project.artifactId}-${project.version}.jar</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- 
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/main/assembly/pkg-assembly.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+			-->
+		</plugins>
+	</build>
+
+</project>

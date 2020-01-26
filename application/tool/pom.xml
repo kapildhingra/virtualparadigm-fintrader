@@ -4,19 +4,18 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.virtualparadigm.fintrader.parent.reactor</groupId>
-		<artifactId>master-pom</artifactId>
+		<groupId>com.virtualparadigm.fintrader.app</groupId>
+		<artifactId>parent-pom</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.virtualparadigm.fintrader.app</groupId>
+	<groupId>com.virtualparadigm.fintrader.app.tool</groupId>
 	<artifactId>parent-pom</artifactId>
 	<name>${project.artifactId}</name>
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>module</module>
-		<module>tool</module>
+		<module>instrument-loader</module>
 	</modules>
 
 	<build>

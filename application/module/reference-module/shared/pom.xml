@@ -4,28 +4,18 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>com.virtualparadigm.fintrader.parent.reactor</groupId>
-		<artifactId>master-pom</artifactId>
+		<groupId>com.virtualparadigm.fintrader.app.module.reference</groupId>
+		<artifactId>parent-pom</artifactId>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>com.virtualparadigm.fintrader.app</groupId>
+	<groupId>com.virtualparadigm.fintrader.app.module.reference.shared</groupId>
 	<artifactId>parent-pom</artifactId>
 	<name>${project.artifactId}</name>
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>module</module>
-		<module>tool</module>
+		<module>greeting-data</module>
 	</modules>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>	
 	
 </project>
