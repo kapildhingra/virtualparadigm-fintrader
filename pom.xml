@@ -47,7 +47,7 @@
 		<commons-codec.version>1.10</commons-codec.version>
 		<commons-pool.version>1.6</commons-pool.version>
 		<commons-math.version>3.2</commons-math.version>
-		<jackson.version>2.9.2</jackson.version>
+		<jackson.version>2.11.0</jackson.version>
 		<javax.inject.version>1</javax.inject.version>
 		<spring.version>5.2.0.RELEASE</spring.version>
 		<slf4jVersion>1.6.1</slf4jVersion>
