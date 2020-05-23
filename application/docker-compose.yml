@@ -21,7 +21,7 @@ services:
   #    KEYCLOAK_PASSWORD: "admin"
   #    DB_VENDOR: "h2"
   #  volumes: 
-  #    - c:\dev\container-volumes\virtualparadigm.fintrader.keycloak:/tmp
+  #    - c:/dev/container-volumes/virtualparadigm.fintrader/keycloak:/tmp
   #  image: "jboss/keycloak"
 
   # ==========================================
@@ -30,7 +30,7 @@ services:
   influxdb:
     image: influxdb:1.3.5
     volumes:
-      - c:/dev/container-volumes/example.tick/influxdb:/var/lib/influxdb
+      - c:/dev/container-volumes/virtualparadigm.fintrader.influxdb:/var/lib/influxdb
     ports:
       - "8086:8086"
     environment:

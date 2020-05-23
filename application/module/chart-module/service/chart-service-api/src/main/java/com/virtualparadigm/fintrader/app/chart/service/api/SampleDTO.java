@@ -10,16 +10,17 @@ public class SampleDTO implements Serializable
 	private static final long serialVersionUID = 1L;
 	
 	private DateTime dateTime;
-	private BigDecimal measurement;
+	private BigDecimal value;
+	
 	public SampleDTO()
 	{
 		super();
 	}
-	public SampleDTO(DateTime dateTime, BigDecimal measurement)
+	public SampleDTO(DateTime dateTime, BigDecimal value)
 	{
 		super();
 		this.dateTime = dateTime;
-		this.measurement = measurement;
+		this.value = value;
 	}
 	public DateTime getDateTime()
 	{
@@ -29,12 +30,12 @@ public class SampleDTO implements Serializable
 	{
 		this.dateTime = dateTime;
 	}
-	public BigDecimal getMeasurement()
+	public BigDecimal getValue()
 	{
-		return measurement;
+		return value;
 	}
-	public void setMeasurement(BigDecimal measurement)
+	public void setValue(BigDecimal value)
 	{
-		this.measurement = measurement;
+		this.value = value;
 	}
 }

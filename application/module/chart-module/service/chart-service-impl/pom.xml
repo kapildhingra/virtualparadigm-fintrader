@@ -25,16 +25,51 @@
 		</dependency>
 		
 		<dependency>
+			<groupId>com.virtualparadigm.comp.finance</groupId>
+			<artifactId>vparadigm-finance-chart</artifactId>		
+		</dependency>
+		
+		<dependency>
 			<groupId>com.virtualparadigm.fintrader.app.module.chart.service</groupId>
 			<artifactId>chart-service-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.inject</groupId>
+			<artifactId>javax.inject</artifactId>
 		</dependency>
 		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+<!-- 		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-classic</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>ch.qos.logback</groupId>
+					<artifactId>logback-core</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+-->		
 		<dependency>
 			<groupId>org.influxdb</groupId>
 			<artifactId>influxdb-java</artifactId>
@@ -44,10 +79,12 @@
 
 	<build>
 		<plugins>
+<!-- 		
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+-->			
 		</plugins>
 	</build>
 

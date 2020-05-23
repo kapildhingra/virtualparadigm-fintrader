@@ -9,11 +9,14 @@ public class SampleData implements Serializable
 	
 	private String field;
 	private BigDecimal value;
-	public SampleData(String field, BigDecimal value)
+	private String unitOfMeasure;
+	
+	public SampleData(String field, BigDecimal value, String unitOfMeasure)
 	{
 		super();
 		this.field = field;
 		this.value = value;
+		this.unitOfMeasure = unitOfMeasure;
 	}
 	public String getField()
 	{
@@ -22,6 +25,10 @@ public class SampleData implements Serializable
 	public BigDecimal getValue()
 	{
 		return value;
+	}
+	public String getUnitOfMeasure()
+	{
+		return unitOfMeasure;
 	}
 	
 }
