@@ -15,13 +15,13 @@ import pl.zankowski.iextrading4j.client.IEXTradingClient;
 import pl.zankowski.iextrading4j.client.rest.request.refdata.v1.ExchangeRequestBuilder;
 import pl.zankowski.iextrading4j.client.rest.request.refdata.v1.ExchangeSymbolsRequestBuilder;
 
-public class ChartReferenceDelegateIEXImpl implements ChartReferenceDelegate
+public class InstrumentReferenceDelegateIEXImpl implements InstrumentReferenceDelegate
 {
-	private static final VParadigmLogger LOGGER = new VParadigmLogger(ChartReferenceDelegateIEXImpl.class);
+	private static final VParadigmLogger LOGGER = new VParadigmLogger(InstrumentReferenceDelegateIEXImpl.class);
 	
 	private IEXCloudClient iexClient;
 
-	public ChartReferenceDelegateIEXImpl()
+	public InstrumentReferenceDelegateIEXImpl()
 	{
 		this(
 			IEXTradingApiVersion.valueOf(ChartLoaderConfiguration.getIEXAPIService()), 
@@ -29,7 +29,7 @@ public class ChartReferenceDelegateIEXImpl implements ChartReferenceDelegate
 			ChartLoaderConfiguration.getIEXAPISecretToken());
 	}
 	
-	public ChartReferenceDelegateIEXImpl(IEXTradingApiVersion iexTradingApiVersion, String iexPublishableToken, String iexSecretToken)
+	public InstrumentReferenceDelegateIEXImpl(IEXTradingApiVersion iexTradingApiVersion, String iexPublishableToken, String iexSecretToken)
 	{
 		try
 		{
@@ -49,19 +49,19 @@ public class ChartReferenceDelegateIEXImpl implements ChartReferenceDelegate
 	
 
 	@Override
-	public List<String> getExchanges()
+	public List<ExchangeVO> getExchanges()
 	{
-        List<String> exchangeNameList = null;
+        List<ExchangeVO> exchangeList = null;
         final List<Exchange> foundExchanges = this.iexClient.executeRequest(new ExchangeRequestBuilder().build());
         if(foundExchanges != null)
         {
-        	exchangeNameList = new ArrayList<String>();
+        	exchangeList = new ArrayList<ExchangeVO>();
         	for(Exchange foundExchange : foundExchanges)
         	{
-        		exchangeNameList.add(foundExchange.getExchange());
+        		exchangeList.add(new ExchangeVO(foundExchange.getExchange(),0,0));
         	}
         }
-        return exchangeNameList;
+        return exchangeList;
 	}
 	
 	@Override
@@ -79,9 +79,9 @@ public class ChartReferenceDelegateIEXImpl implements ChartReferenceDelegate
 
 
 	@Override
-	public List<Instrument> getInstrumentsByExchange(String exchange)
+	public List<InstrumentVO> getInstrumentsByExchange(String exchange)
 	{
-        List<Instrument> instrumentList = null;
+        List<InstrumentVO> instrumentList = null;
         final List<ExchangeSymbol> foundExchangeSymbols = 
         		this.iexClient.executeRequest(
         				new ExchangeSymbolsRequestBuilder()
@@ -90,10 +90,10 @@ public class ChartReferenceDelegateIEXImpl implements ChartReferenceDelegate
 		
         if(foundExchangeSymbols != null)
         {
-        	instrumentList = new ArrayList<Instrument>();
+        	instrumentList = new ArrayList<InstrumentVO>();
         	for(ExchangeSymbol foundExchangeSymbol : foundExchangeSymbols)
         	{
-        		instrumentList.add(new Instrument(exchange, foundExchangeSymbol.getSymbol()));
+        		instrumentList.add(new InstrumentVO(exchange, foundExchangeSymbol.getSymbol()));
         	}
         }
 		return instrumentList;
@@ -101,14 +101,14 @@ public class ChartReferenceDelegateIEXImpl implements ChartReferenceDelegate
 
 
 	@Override
-	public List<Instrument> getInstrumentsBySector(String sector)
+	public List<InstrumentVO> getInstrumentsBySector(String sector)
 	{
 		throw new UnsupportedOperationException();
 	}
 
 
 	@Override
-	public List<Instrument> getInstrumentsByIndex(String index)
+	public List<InstrumentVO> getInstrumentsByIndex(String index)
 	{
 		throw new UnsupportedOperationException();
 	}

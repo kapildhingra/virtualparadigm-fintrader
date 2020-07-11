@@ -6,23 +6,28 @@ import java.util.List;
 
 public interface ChartRepositoryDAO
 {
-	ChartData createChart(String userSpace, SampleFrequencyData sampleFrequency, String symbol, String chartName);
-	ChartData getChart(ChartId chartId);
-	ChartData getChart(String userSpace, SampleFrequencyData sampleFrequency, String symbol, String chartName);
-	Collection<ChartData> findCharts(String userSpace);
-	Collection<ChartData> findCharts(String userSpace, SampleFrequencyData sampleFrequency);
-	Collection<ChartData> findCharts(String userSpace, SampleFrequencyData sampleFrequency, String symbol);
+	void createUserSpace(String userSpace);
+	Collection<String> getUserSpaces();
+	String getUserSpace(String userSpace);
+	void removeUserSpace(String userSpace);
 	
-	void saveSampleVector(ChartId chartId, SampleVectorData sampleVector);
-	void saveSampleVectors(ChartId chartId, List<SampleVectorData> sampleVectors);
+	ChartRecord createChart(String userSpace, SampleRecordFrequency sampleRecordFrequency, String symbol, String chartName);
+	ChartRecord getChart(String userSpace, ChartId chartId);
+	ChartRecord getChart(String userSpace, SampleRecordFrequency sampleRecordFrequency, String symbol, String chartName);
+	Collection<ChartRecord> findCharts(String userSpace);
+	Collection<ChartRecord> findCharts(String userSpace, SampleRecordFrequency sampleRecordFrequency);
+	Collection<ChartRecord> findCharts(String userSpace, SampleRecordFrequency sampleRecordFrequency, String symbol);
+	
+	void saveSampleVector(String userSpace, ChartId chartId, SampleVectorRecord sampleVector);
+	void saveSampleVectors(String userSpace, ChartId chartId, List<SampleVectorRecord> sampleVectors);
 
-	void clearSampleVector(ChartId chartId, long sampleTimestamp);
-	void clearSample(ChartId chartId, long sampleTimestamp, String field);
+	void clearSampleVector(String userSpace, ChartId chartId, long sampleTimestamp);
+	void clearSample(String userSpace, ChartId chartId, long sampleTimestamp, String field);
 	
-	List<SampleVectorData> getSampleVectors(ChartId chartId);
-	List<SampleVectorData> getSampleVectors(ChartId chartId, long startTimestamp, long endTimestamp);
-	SampleVectorData getSampleVector(ChartId chartId, long sampleTimestamp);
-	BigDecimal getSample(ChartId chartId, long sampleTimestamp, String field);
-	List<BigDecimal> getSamples(ChartId chartId, String field);
+	List<SampleVectorRecord> getSampleVectors(String userSpace, ChartId chartId);
+	List<SampleVectorRecord> getSampleVectors(String userSpace, ChartId chartId, long startTimestamp, long endTimestamp);
+	SampleVectorRecord getSampleVector(String userSpace, ChartId chartId, long sampleTimestamp);
+	BigDecimal getSample(String userSpace, ChartId chartId, long sampleTimestamp, String field);
+	List<BigDecimal> getSamples(String userSpace, ChartId chartId, String field);
 	
 }

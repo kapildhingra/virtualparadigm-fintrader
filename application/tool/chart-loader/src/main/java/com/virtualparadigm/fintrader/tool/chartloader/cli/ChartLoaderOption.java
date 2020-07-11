@@ -6,6 +6,10 @@ import java.util.Map;
 
 public enum ChartLoaderOption
 {
+	USERSPACE("u", "userspace", "userspace", true), 
+	CHART_NAME("n", "chartname", "chartname", true), 
+	EXCHANGE("e", "exchange", "exchange", true), 
+	SYMBOLS("ss", "symbols", "symbols", false), 
 	SYMBOL("s", "symbol", "symbol", true), 
 	SAMPLE_FREQUENCY("f", "frequency", "frequency", true), 
 	START_TIME("st", "start", "start", true), 

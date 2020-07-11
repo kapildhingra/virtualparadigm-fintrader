@@ -8,7 +8,8 @@ import org.joda.time.DateTime;
 public class ChartVectorDTO 
 {
 	private static final long serialVersionUID = 1L;
-	private DateTime dateTIme;
+	private DateTime dateTime;
+	//TODO: look into adding unit of measure to values
 	private Map<String, BigDecimal> valueMap;
 	
 	public ChartVectorDTO()
@@ -19,18 +20,27 @@ public class ChartVectorDTO
 	public ChartVectorDTO(DateTime dateTIme, Map<String, BigDecimal> valueMap)
 	{
 		super();
-		this.dateTIme = dateTIme;
+		this.dateTime = dateTIme;
 		this.valueMap = valueMap;
 	}
 
-	public DateTime getDateTIme()
+	public DateTime getDateTime()
 	{
-		return dateTIme;
+		return dateTime;
+	}
+	public long getDateTimeMillis()
+	{
+		long dateTimeMillis = -1;
+		if(this.dateTime != null)
+		{
+			dateTimeMillis = this.dateTime.getMillis();
+		}
+		return dateTimeMillis;
 	}
 
-	public void setDateTIme(DateTime dateTIme)
+	public void setDateTime(DateTime dateTIme)
 	{
-		this.dateTIme = dateTIme;
+		this.dateTime = dateTIme;
 	}
 
 	public Map<String, BigDecimal> getValueMap()

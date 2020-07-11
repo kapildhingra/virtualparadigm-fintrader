@@ -6,7 +6,7 @@ import java.util.List;
 import com.virtualparadigm.fintrader.app.chart.service.api.ChartVectorDTO;
 import com.vparadigm.shared.finance.chart.Chart;
 
-public class ChartVectorMapper
+public class ChartVectorDTOMapper
 {
 	//private static final Instant EPOCH_INSTANT = Instant.f
 	
@@ -18,7 +18,7 @@ public class ChartVectorMapper
 			chartVectorDTOList = new ArrayList<ChartVectorDTO>();
 			for(int i=0; i<chart.getTimeSeriesSize(); i++)
 			{
-				chartVectorDTOList.add(new ChartVectorDTO(chart.getReverseIndexTime(i), chart.atReverseIndexMap(i)));
+				chartVectorDTOList.add(new ChartVectorDTO(chart.getReverseIndexTime(i), chart.atReverseIndexMap(i, false)));
 			}
 		}
 		return chartVectorDTOList;
@@ -32,7 +32,7 @@ public class ChartVectorMapper
 			chartVectorDTOList = new ArrayList<ChartVectorDTO>();
 			for(int i=0; i<chart.getTimeSeriesSize(); i++)
 			{
-				chartVectorDTOList.add(new ChartVectorDTO(chart.getForwardIndexTime(i), chart.atForwardIndexMap(i)));
+				chartVectorDTOList.add(new ChartVectorDTO(chart.getForwardIndexTime(i), chart.atForwardIndexMap(i, false)));
 			}
 		}
 		return chartVectorDTOList;

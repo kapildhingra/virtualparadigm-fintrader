@@ -7,8 +7,14 @@ import java.util.Map;
 public enum ChartLoaderCommand
 {
 	SYMBOLS("symbols", "symbols"),
-	CHART("chart", "chart"),
-	LOAD("load", "load");
+	PULL("pull", "pull"),
+	LOAD("load", "load"),
+	QUERY("query", "query"),
+	PEEK("peek", "peek");
+//	SYMBOLS("symbols", "symbols"),
+//	INSTRUMENT("instrument", "instrument"),
+//	CHART("chart", "chart"),
+//	LOAD("load", "load");
 	
 	private static final Map<String, ChartLoaderCommand> lookupMap = new HashMap<String, ChartLoaderCommand>();
 	static

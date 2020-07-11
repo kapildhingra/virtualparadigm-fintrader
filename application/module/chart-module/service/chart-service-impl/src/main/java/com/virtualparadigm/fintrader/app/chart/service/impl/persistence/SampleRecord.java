@@ -3,7 +3,7 @@ package com.virtualparadigm.fintrader.app.chart.service.impl.persistence;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class SampleData implements Serializable
+public class SampleRecord implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -11,7 +11,7 @@ public class SampleData implements Serializable
 	private BigDecimal value;
 	private String unitOfMeasure;
 	
-	public SampleData(String field, BigDecimal value, String unitOfMeasure)
+	public SampleRecord(String field, BigDecimal value, String unitOfMeasure)
 	{
 		super();
 		this.field = field;

@@ -1,0 +1,10 @@
+[
+	{
+		"utcOffset": "-5:00",
+		"name": "NYSE"
+	}, 
+	{
+		"utcOffset": "-5:00",
+		"name": "NASDAQ"
+	}
+]

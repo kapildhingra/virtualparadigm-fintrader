@@ -1,17 +1,17 @@
-package com.virtualparadigm.fintrader.tool.chartloader.delegate;
+package com.virtualparadigm.fintrader.tool.chartloader.process;
 
 import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Instrument implements Serializable
+public class InstrumentData implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	@JsonProperty("exchange")
 	private String exchange;
 	@JsonProperty("symbol")
 	private String symbol;
-	public Instrument(String exchange, String symbol)
+	public InstrumentData(String exchange, String symbol)
 	{
 		super();
 		this.exchange = exchange;

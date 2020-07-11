@@ -2,6 +2,7 @@ package com.virtualparadigm.fintrader.app.chart.service.impl.bean;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,12 +53,25 @@ public class ChartDTOMapper
 			chartDefinitionDTO = 
 					new ChartDefinitionDTO(
 							chart.getUserSpace().getName(), 
-							chart.getGUID().getStringValue(), 
-							chart.getSymbol(), 
 							ChartDTOMapper.getSampleDTOFrequency(chart.getSampleFrequency()), 
+							chart.getSymbol(), 
 							chart.getChartName());
 		}
 		return chartDefinitionDTO;
+	}
+	
+	public static Collection<ChartDefinitionDTO> toChartDefinitionDTOs(Collection<Chart> charts)
+	{
+		List<ChartDefinitionDTO> chartDefinitionDTOList = null;
+		if(charts != null)
+		{
+			chartDefinitionDTOList = new ArrayList<ChartDefinitionDTO>();
+			for(Chart chart : charts)
+			{
+				chartDefinitionDTOList.add(ChartDTOMapper.toChartDefinitionDTO(chart));
+			}
+		}
+		return chartDefinitionDTOList;
 	}
 	
 	public static SampleDTOFrequency getSampleDTOFrequency(SampleFrequency sampleFrequency)
@@ -78,7 +92,7 @@ public class ChartDTOMapper
 			chartVectorDTOList = new ArrayList<ChartVectorDTO>();
 			for(int i=0; i<chart.getTimeSeriesSize(); i++)
 			{
-				chartVectorDTOList.add(new ChartVectorDTO(chart.getReverseIndexTime(i), chart.atReverseIndexMap(i)));
+				chartVectorDTOList.add(new ChartVectorDTO(chart.getReverseIndexTime(i), chart.atReverseIndexMap(i, false)));
 			}
 		}
 		return chartVectorDTOList;
@@ -92,7 +106,7 @@ public class ChartDTOMapper
 			chartVectorDTOList = new ArrayList<ChartVectorDTO>();
 			for(int i=0; i<chart.getTimeSeriesSize(); i++)
 			{
-				chartVectorDTOList.add(new ChartVectorDTO(chart.getForwardIndexTime(i), chart.atForwardIndexMap(i)));
+				chartVectorDTOList.add(new ChartVectorDTO(chart.getForwardIndexTime(i), chart.atForwardIndexMap(i, false)));
 			}
 		}
 		return chartVectorDTOList;

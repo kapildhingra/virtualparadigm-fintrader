@@ -3,15 +3,20 @@ package com.virtualparadigm.fintrader.tool.chartloader.process;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.virtualparadigm.fintrader.app.chart.service.api.SampleDTOFrequency;
-import com.virtualparadigm.fintrader.tool.chartloader.delegate.ChartData;
-import com.virtualparadigm.fintrader.tool.chartloader.delegate.Instrument;
+import com.virtualparadigm.fintrader.tool.chartloader.delegate.ChartVectorVO;
 
 public interface ChartLoader
 {
-	List<Instrument> getInstruments();
+	List<InstrumentData> pullInstruments();
+	List<ChartVectorData> pullChart(String exchange, String symbol, SampleDataFrequency sampleDataFrequency, LocalDateTime startTime, LocalDateTime endTime);
+
+
+//	void cacheInstruments(List<InstrumentData> instrumentDataList);
+//	void cacheChart(String exchange, String symbol, SampleDTOFrequency sampleDTOFrequency, List<ChartVectorVO> chartVectorDataList);
 	
-	List<ChartData> getChartData(String symbol, SampleDTOFrequency sampleDTOFrequency, LocalDateTime startTime, LocalDateTime endTime);
+	void loadChart(String userSpace, String chartName, String exchange, String symbol, SampleDataFrequency sampleDataFrequency, List<ChartVectorData> chartVectorDataList);
 	
-	void loadChartData(String symbol, SampleDTOFrequency sampleDTOFrequency, List<ChartData> chartDataList);
+	List<ChartVectorVO> queryChart(String userSpace, String chartName, String exchange, String symbol, SampleDataFrequency sampleDataFrequency);
+	
+	
 }

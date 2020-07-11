@@ -8,8 +8,8 @@ public class ChartDefinitionDTO implements Serializable
 	
 	private String identifier;
 	private String userSpace;
-	private String symbol;
 	private SampleDTOFrequency sampleDTOFrequency;
+	private String symbol;
 	private String name;
 	
 	public ChartDefinitionDTO()
@@ -17,11 +17,11 @@ public class ChartDefinitionDTO implements Serializable
 		super();
 	}
 
-	public ChartDefinitionDTO(String userSpace, String identifier, String symbol, SampleDTOFrequency sampleDTOFrequency, String name)
+	public ChartDefinitionDTO(String userSpace, SampleDTOFrequency sampleDTOFrequency, String symbol, String name)
 	{
 		super();
+		this.identifier = ChartDefinitionDTO.buildIdentifier(userSpace, sampleDTOFrequency, symbol, name);
 		this.userSpace = userSpace;
-		this.identifier = identifier;
 		this.symbol = symbol;
 		this.sampleDTOFrequency = sampleDTOFrequency;
 		this.name = name;
@@ -75,5 +75,10 @@ public class ChartDefinitionDTO implements Serializable
 	public void setName(String name)
 	{
 		this.name = name;
+	}
+	
+	public static String buildIdentifier(String userSpace, SampleDTOFrequency sampleDTOFrequency, String symbol, String name)
+	{
+		return userSpace + "." + sampleDTOFrequency + "." + symbol + "." + name;
 	}
 }

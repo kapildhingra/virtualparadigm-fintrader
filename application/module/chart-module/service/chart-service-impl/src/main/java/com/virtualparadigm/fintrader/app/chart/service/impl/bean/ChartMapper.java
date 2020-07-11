@@ -1,14 +1,17 @@
 package com.virtualparadigm.fintrader.app.chart.service.impl.bean;
 
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
 
-import com.virtualparadigm.fintrader.app.chart.service.impl.persistence.ChartData;
-import com.virtualparadigm.fintrader.app.chart.service.impl.persistence.SampleData;
-import com.virtualparadigm.fintrader.app.chart.service.impl.persistence.SampleVectorData;
+import com.virtualparadigm.fintrader.app.chart.service.impl.persistence.ChartRecord;
+import com.virtualparadigm.fintrader.app.chart.service.impl.persistence.SampleRecord;
+import com.virtualparadigm.fintrader.app.chart.service.impl.persistence.SampleVectorRecord;
 import com.vparadigm.shared.finance.chart.Chart;
 import com.vparadigm.shared.finance.chart.ChartUserSpace;
 import com.vparadigm.shared.ts.IDiscreteTimeSeries;
@@ -18,29 +21,38 @@ public class ChartMapper
 {
 	//private static final Instant EPOCH_INSTANT = Instant.f
 	
-	public static Chart toChart(ChartData chartData, List<SampleVectorData> sampleVectorList)
+	public static Chart toChart(ChartRecord chartRecord, List<SampleVectorRecord> sampleVectorList)
 	{
 		Chart chart = null;
-		if(chartData != null)
+		if(chartRecord != null)
 		{
-			if(sampleVectorList != null && sampleVectorList.size() > 0)
+			ChartUserSpace chartUserSpace = new ChartUserSpace(chartRecord.getUserspace());
+			if(sampleVectorList == null || sampleVectorList.size() == 0)
 			{
-				SampleVectorData firstSampleVectorData = sampleVectorList.get(0);
-				SampleVectorData lastSampleVectorData = sampleVectorList.get(sampleVectorList.size()-1);
-				
-				ChartUserSpace chartUserSpace = new ChartUserSpace(chartData.getUserspace());
+				chart = 
+						chartUserSpace.createChart(
+								SampleFrequency.valueOf(
+										chartRecord.getSampleRecordFrequency().name()), 
+								chartRecord.getSymbol(), 
+								chartRecord.getChartName(), 
+								new Interval(0, Instant.now().toEpochMilli()));
+			}
+			else
+			{
+				SampleVectorRecord firstSampleVectorData = sampleVectorList.get(0);
+				SampleVectorRecord lastSampleVectorData = sampleVectorList.get(sampleVectorList.size()-1);
 				
 				chart = 
 						chartUserSpace.createChart(
 								SampleFrequency.valueOf(
-										chartData.getSampleFrequencyData().name()), 
-								chartData.getSymbol(), 
-								chartData.getChartName(), 
+										chartRecord.getSampleRecordFrequency().name()), 
+								chartRecord.getSymbol(), 
+								chartRecord.getChartName(), 
 								new Interval(firstSampleVectorData.getGmtTimestamp(), lastSampleVectorData.getGmtTimestamp()));
 				
-				SampleVectorData sampleVectorData = null;
-				SampleData[] sampleDatas = null;
-				SampleData sampleData = null;
+				SampleVectorRecord sampleVectorData = null;
+				SampleRecord[] sampleDatas = null;
+				SampleRecord sampleData = null;
 				IDiscreteTimeSeries<BigDecimal> registeredDTS = null;
 				
 				for(int sampleVectorIndex=0; sampleVectorIndex<sampleVectorList.size(); sampleVectorIndex++)
@@ -48,7 +60,7 @@ public class ChartMapper
 					sampleVectorData = sampleVectorList.get(sampleVectorIndex);
 					if(sampleVectorData != null)
 					{
-						sampleDatas = sampleVectorData.getSampleData();
+						sampleDatas = sampleVectorData.getSampleRecords();
 						if(sampleDatas != null)
 						{
 							for(int sampleDataIndex=0; sampleDataIndex<sampleDatas.length; sampleDataIndex++)
@@ -72,5 +84,21 @@ public class ChartMapper
 		}
 		return chart;
 	}
+	
+	
+	public static Collection<Chart> toCharts(Collection<ChartRecord> chartRecords)
+	{
+		List<Chart> chartList = null;
+		if(chartRecords != null)
+		{
+			chartList = new ArrayList<Chart>();
+			for(ChartRecord chartRecord : chartRecords)
+			{
+				chartList.add(ChartMapper.toChart(chartRecord, null));
+			}
+		}
+		return chartList;
+	}
+
 	
 }

@@ -12,9 +12,9 @@ import com.vparadigm.shared.comp.common.logging.VParadigmLogger;
 public class ChartLoaderConfiguration
 {
 	private static final VParadigmLogger LOGGER = new VParadigmLogger(ChartLoaderConfiguration.class);
-	private static final String INSTRUMENT_LOADER_CONFIG_FILE = "instrument-loader.properties";
+	private static final String INSTRUMENT_LOADER_CONFIG_FILE = "chart-loader.properties";
 	
-	public static final String INSTRUMENT_LOADER_GLOBAL_KEY_PREFIX = "instrumentloader";
+	public static final String INSTRUMENT_LOADER_GLOBAL_KEY_PREFIX = "chartloader";
 	
 	public static final String KEY_INFLUX = INSTRUMENT_LOADER_GLOBAL_KEY_PREFIX + ".influx";
 	public static final String KEY_INFLUX_HOST = KEY_INFLUX + ".host";

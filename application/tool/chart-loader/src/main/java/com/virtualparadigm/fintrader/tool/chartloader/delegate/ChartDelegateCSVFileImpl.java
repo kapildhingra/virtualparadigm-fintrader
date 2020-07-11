@@ -1,6 +1,7 @@
 package com.virtualparadigm.fintrader.tool.chartloader.delegate;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -22,12 +23,12 @@ import com.vparadigm.shared.comp.common.validate.VParadigmValidator;
 public class ChartDelegateCSVFileImpl implements ChartDelegate
 {
 	private static final VParadigmLogger LOGGER = new VParadigmLogger(ChartDelegateCSVFileImpl.class);
-	private static final String FIELD_DATETIME = "datetime";
-	private static final String FIELD_OPEN = "open";
-	private static final String FIELD_HIGH = "high";
-	private static final String FIELD_LOW = "low";
-	private static final String FIELD_CLOSE = "close";
-	private static final String FIELD_VOLUME = "volume";
+	private static final String FIELD_DATETIME = "DATETIME";
+	private static final String FIELD_OPEN = "OPEN";
+	private static final String FIELD_HIGH = "HIGH";
+	private static final String FIELD_LOW = "LOW";
+	private static final String FIELD_CLOSE = "CLOSE";
+	private static final String FIELD_VOLUME = "VOLUME";
 
 	private String baseDirectory;
 	//private String fileNameRegex;
@@ -72,9 +73,9 @@ public class ChartDelegateCSVFileImpl implements ChartDelegate
 	
 
 	@Override
-	public List<ChartData> getInstrumentData(String symbol, SampleDTOFrequency sampleFrequency, LocalDateTime startTime, LocalDateTime endTime)
+	public List<ChartVectorVO> getChartVectors(String symbol, SampleDTOFrequency sampleFrequency, LocalDateTime startTime, LocalDateTime endTime)
 	{
-		List<ChartData> instrumentDataList = null;
+		List<ChartVectorVO> instrumentDataList = null;
 		File symbolFile = ChartDelegateCSVFileImpl.getSymbolFile(this.baseDirectory, symbol, sampleFrequency, this.normalizedFileNameRegex, this.fileNameRegexSymbolSegment);
 		if(symbolFile != null)
 		{
@@ -84,7 +85,7 @@ public class ChartDelegateCSVFileImpl implements ChartDelegate
 				it = FileUtils.lineIterator(symbolFile, "UTF-8");
 				String line = null;
 				Matcher matcher = null;
-				instrumentDataList = new ArrayList<ChartData>();
+				instrumentDataList = new ArrayList<ChartVectorVO>();
 				while(it.hasNext())
 				{
 					line = it.nextLine();
@@ -98,15 +99,13 @@ public class ChartDelegateCSVFileImpl implements ChartDelegate
 							if((startTime == null || localDateTime.compareTo(startTime) >= 0) && (endTime == null || localDateTime.compareTo(endTime) <= 0))
 							{
 								instrumentDataList.add(
-										new ChartData(
+										new ChartVectorVO(
 												localDateTime, 
-												Double.valueOf(matcher.group(fieldGroupMap.get(FIELD_OPEN))), 
-												Double.valueOf(matcher.group(fieldGroupMap.get(FIELD_HIGH))), 
-												Double.valueOf(matcher.group(fieldGroupMap.get(FIELD_LOW))), 
-												Double.valueOf(matcher.group(fieldGroupMap.get(FIELD_CLOSE))), 
-												Double.valueOf(matcher.group(fieldGroupMap.get(FIELD_VOLUME))).longValue(), 
-												0, 
-												0));
+												new BigDecimal(matcher.group(fieldGroupMap.get(FIELD_OPEN))), 
+												new BigDecimal(matcher.group(fieldGroupMap.get(FIELD_HIGH))), 
+												new BigDecimal(matcher.group(fieldGroupMap.get(FIELD_LOW))), 
+												new BigDecimal(matcher.group(fieldGroupMap.get(FIELD_CLOSE))), 
+												new BigDecimal(matcher.group(fieldGroupMap.get(FIELD_VOLUME)))));
 							}
 						}
 						else

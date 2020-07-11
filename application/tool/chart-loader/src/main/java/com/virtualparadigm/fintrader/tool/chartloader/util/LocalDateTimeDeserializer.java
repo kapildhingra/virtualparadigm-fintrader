@@ -1,4 +1,5 @@
-package com.virtualparadigm.fintrader.tool.chartloader.delegate;
+package com.virtualparadigm.fintrader.tool.chartloader.util;
+
 
 import java.io.IOException;
 import java.time.LocalDateTime;

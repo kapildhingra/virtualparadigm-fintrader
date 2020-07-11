@@ -1,11 +1,10 @@
-package com.virtualparadigm.fintrader.app.chart.service.api;
+package com.virtualparadigm.fintrader.tool.chartloader.process;
 
 import java.io.Serializable;
 
-import org.apache.commons.lang.StringUtils;
 import org.joda.time.PeriodType;
 
-public enum SampleDTOFrequency implements Serializable
+public enum SampleDataFrequency implements Serializable
 {
 	MILLISECOND(PeriodType.millis()), 
 	SECOND(PeriodType.seconds()), 
@@ -16,7 +15,7 @@ public enum SampleDTOFrequency implements Serializable
 	MONTH(PeriodType.months()), 
 	YEAR(PeriodType.years());
 	
-    private SampleDTOFrequency(PeriodType periodType)
+    private SampleDataFrequency(PeriodType periodType)
     {
         this.periodType = periodType;
     }
@@ -28,9 +27,9 @@ public enum SampleDTOFrequency implements Serializable
     	return this.periodType;
     }
     
-    public static SampleDTOFrequency getSampleFrequency(String strPeriodType)
+    public static SampleDataFrequency getSampleFrequency(String strPeriodType)
     {
-    	return SampleDTOFrequency.valueOf(strPeriodType.toUpperCase());
+    	return SampleDataFrequency.valueOf(strPeriodType.toUpperCase());
     }
 }
 

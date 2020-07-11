@@ -12,7 +12,7 @@
 	</root>
 
 	<logger name="com.virtualparadigm" additivity="false">
-		<level value="DEBUG" />
+		<level value="TRACE" />
 		<appender-ref ref="console" />
 	</logger>
 </log4j:configuration>

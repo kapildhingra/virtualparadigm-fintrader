@@ -43,20 +43,20 @@ public class ChartDelegateAlphaVantageImpl implements ChartDelegate
 	
 
 	@Override
-	public List<ChartData> getInstrumentData(String symbol, SampleDTOFrequency sampleDTOFrequency, LocalDateTime startTime, LocalDateTime endTime)
+	public List<ChartVectorVO> getChartVectors(String symbol, SampleDTOFrequency sampleDTOFrequency, LocalDateTime startTime, LocalDateTime endTime)
 	{
-		List<ChartData> instrumentDataList = null;
+		List<ChartVectorVO> instrumentDataList = null;
 		List<StockData> stockDataList = this.retrieveStockData(symbol, sampleDTOFrequency);
 		if(stockDataList != null)
 		{
-			instrumentDataList = new ArrayList<ChartData>();
+			instrumentDataList = new ArrayList<ChartVectorVO>();
 			for(StockData stockData : stockDataList)
 			{
 				if(stockData.getDateTime() != null)
 				{
 					if((startTime == null || stockData.getDateTime().compareTo(startTime) >= 0) && (endTime == null || stockData.getDateTime().compareTo(endTime) <= 0))
 					{
-						instrumentDataList.add(ChartDataMapper.map(stockData));
+						instrumentDataList.add(ChartVectorVOMapper.map(stockData));
 					}
 				}
 				else
@@ -93,7 +93,7 @@ public class ChartDelegateAlphaVantageImpl implements ChartDelegate
 			if(response != null)
 			{
 				Map<String, String> metaData = response.getMetaData();
-				LOGGER.info("Fetched Instrument: " + metaData.get("2. Symbol"));
+				LOGGER.info("Fetched InstrumentData: " + metaData.get("2. Symbol"));
 				LOGGER.info("Additiona Information: " + metaData.get("1. Information"));
 				stockDataList = response.getStockData();
 			}

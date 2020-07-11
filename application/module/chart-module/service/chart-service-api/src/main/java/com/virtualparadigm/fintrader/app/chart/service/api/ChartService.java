@@ -10,21 +10,31 @@ import org.joda.time.Interval;
 public interface ChartService
 {
 	// ======================================
-	// Chart Vectors
+	// User Spaces
 	// ======================================
-	ChartDefinitionDTO getChartDefinition(String chartIdentifier);
-	ChartDefinitionDTO getChartDefinition(String symbol, SampleDTOFrequency sampleDTOFrequency, String chartName);
-	Collection<ChartDefinitionDTO> findChartDefinitions();
-	ChartDefinitionDTO saveChartDefinition(String symbol, SampleDTOFrequency sampleDTOFrequency, String name);
-	
-	void removeChart(String chartIdentifier);
+	UserSpaceDTO getUserSpace(String userSpace);
+	Collection<UserSpaceDTO> findUserSpaces();
+	UserSpaceDTO saveUserSpace(String userSpace);
+	void removeUserSpace(String userSpace);
 	
 	// ======================================
 	// Chart Vectors
 	// ======================================
-	ChartVectorDTO getChartVector(String chartIdentifier, DateTime dateTime);
-	void saveChartVector(String chartIdentifier, ChartVectorDTO chartVectorDTO, Map<String, String> unitOfMeasureMapping, boolean overwrite);
+	ChartDefinitionDTO getChartDefinition(ChartIdentifier chartIdentifier);
+	ChartDefinitionDTO getChartDefinition(String userSpace, SampleDTOFrequency sampleDTOFrequency, String symbol, String chartName);
+	Collection<ChartDefinitionDTO> findChartDefinitions(String userSpace);
+	Collection<ChartDefinitionDTO> findChartDefinitions(String userSpace, SampleDTOFrequency sampleDTOFrequency);
+	Collection<ChartDefinitionDTO> findChartDefinitions(String userSpace, SampleDTOFrequency sampleDTOFrequency, String symbol);
+	ChartDefinitionDTO saveChartDefinition(String userSpace, SampleDTOFrequency sampleDTOFrequency, String symbol, String chartName);
+	
+	void removeChart(ChartIdentifier chartIdentifier);
+	
+	// ======================================
+	// Chart Vectors
+	// ======================================
+	ChartVectorDTO getChartVector(ChartIdentifier chartIdentifier, DateTime dateTime);
+	void saveChartVector(ChartIdentifier chartIdentifier, ChartVectorDTO chartVectorDTO, Map<String, String> unitOfMeasureMapping, boolean overwrite);
 
-	ChartDTO getChart(String chartIdentifier, Interval interval);
-	void saveChartVectors(String chartIdentifier, List<ChartVectorDTO> chartVectors, Map<String, String> unitOfMeasureMapping, boolean overwrite);
+	ChartDTO getChart(ChartIdentifier chartIdentifier, Interval interval);
+	void saveChartVectors(ChartIdentifier chartIdentifier, List<ChartVectorDTO> chartVectors, Map<String, String> unitOfMeasureMapping, boolean overwrite);
 }
