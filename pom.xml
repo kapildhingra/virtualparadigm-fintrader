@@ -35,7 +35,7 @@
 		<vparadigm-common.version>1.0.0-SNAPSHOT</vparadigm-common.version>
 		<vparadigm-finance.version>1.0.0-SNAPSHOT</vparadigm-finance.version>
 		<vparadigm-chart-service.version>${project.version}</vparadigm-chart-service.version>
-		<junit.version>4.10</junit.version>
+		<junit.version>4.13.1</junit.version>
 		<jacoco.version>0.8.2</jacoco.version>
 		<maven-dependency-plugin.version>2.9</maven-dependency-plugin.version>
 		<mockito.version>1.9.0-rc1</mockito.version>
