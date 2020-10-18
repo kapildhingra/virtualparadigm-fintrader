@@ -47,22 +47,37 @@ public class InstrumentReferenceDelegateIEXImpl implements InstrumentReferenceDe
 		}
 	}
 	
-
 	@Override
-	public List<ExchangeVO> getExchanges()
+	public List<String> getExchanges()
 	{
-        List<ExchangeVO> exchangeList = null;
+        List<String> exchangeList = null;
         final List<Exchange> foundExchanges = this.iexClient.executeRequest(new ExchangeRequestBuilder().build());
         if(foundExchanges != null)
         {
-        	exchangeList = new ArrayList<ExchangeVO>();
+        	exchangeList = new ArrayList<String>();
         	for(Exchange foundExchange : foundExchanges)
         	{
-        		exchangeList.add(new ExchangeVO(foundExchange.getExchange(),0,0));
+        		exchangeList.add(foundExchange.getExchange());
         	}
         }
         return exchangeList;
 	}
+	
+//	@Override
+//	public List<ExchangeVO> getExchanges()
+//	{
+//        List<ExchangeVO> exchangeList = null;
+//        final List<Exchange> foundExchanges = this.iexClient.executeRequest(new ExchangeRequestBuilder().build());
+//        if(foundExchanges != null)
+//        {
+//        	exchangeList = new ArrayList<ExchangeVO>();
+//        	for(Exchange foundExchange : foundExchanges)
+//        	{
+//        		exchangeList.add(new ExchangeVO(foundExchange.getExchange(),0,0));
+//        	}
+//        }
+//        return exchangeList;
+//	}
 	
 	@Override
 	public List<String> getSectors()

@@ -9,7 +9,7 @@ import java.util.Map;
 import org.joda.time.DateTime;
 
 import com.virtualparadigm.fintrader.app.chart.service.api.ChartVectorDTO;
-import com.vparadigm.shared.finance.chart.Chart;
+import com.vparadigm.shared.finance.ts.Chart;
 
 public class ChartVectorDTOMapper
 {
@@ -31,25 +31,25 @@ public class ChartVectorDTOMapper
 		return ChartVectorDTOMapper.unitOfMeasureMapping;
 	}
 	
-	public static ChartVectorDTO toChartVectorDTO(ChartVectorData chartVectorData)
+	public static ChartVectorDTO toChartVectorDTO(ChartVectorCLO chartVectorCLO)
 	{
 		ChartVectorDTO chartVectorDTO = null;
-		if(chartVectorData != null)
+		if(chartVectorCLO != null)
 		{
 			chartVectorDTO = 
 					new ChartVectorDTO(
-							new DateTime(chartVectorData.getDateTime().toInstant(ZoneOffset.UTC).toEpochMilli()), 
-							chartVectorData.getValues());
+							new DateTime(chartVectorCLO.getDateTime().toInstant(ZoneOffset.UTC).toEpochMilli()), 
+							chartVectorCLO.getValues());
 		}
 		return chartVectorDTO;
 	}
-	public static List<ChartVectorDTO> toChartVectorDTOs(List<ChartVectorData> chartVectorDataList)
+	public static List<ChartVectorDTO> toChartVectorDTOs(List<ChartVectorCLO> chartVectorDataList)
 	{
 		List<ChartVectorDTO> chartVectorDTOList = null;
 		if(chartVectorDataList != null)
 		{
 			chartVectorDTOList = new ArrayList<ChartVectorDTO>();
-			for(ChartVectorData instrumentData : chartVectorDataList)
+			for(ChartVectorCLO instrumentData : chartVectorDataList)
 			{
 				chartVectorDTOList.add(ChartVectorDTOMapper.toChartVectorDTO(instrumentData));
 			}
@@ -58,38 +58,5 @@ public class ChartVectorDTOMapper
 	}
 	
 	
-//	public static ChartVectorDTO toChartVectorDTO(ChartVectorVO chartVectorVO)
-//	{
-//		ChartVectorDTO chartVectorDTO = null;
-//		if(chartVectorVO != null)
-//		{
-//			Map<String, BigDecimal> valueMap = chartVectorVO.getValues();
-//			valueMap.put(Chart.StandardInstrumentSeries.OPEN.name(), chartVectorVO.getOpen());
-//			valueMap.put(Chart.StandardInstrumentSeries.HIGH.name(), chartVectorVO.getHigh());
-//			valueMap.put(Chart.StandardInstrumentSeries.LOW.name(), chartVectorVO.getLow());
-//			valueMap.put(Chart.StandardInstrumentSeries.CLOSE.name(), chartVectorVO.getClose());
-//			valueMap.put(Chart.StandardInstrumentSeries.VOLUME.name(), chartVectorVO.getVolume());
-//			
-//			chartVectorDTO = 
-//					new ChartVectorDTO(
-//							new DateTime(chartVectorVO.getDateTime().toInstant(ZoneOffset.UTC).toEpochMilli()), 
-//							valueMap);
-//		}
-//		return chartVectorDTO;
-//	}
-//	
-//	public static List<ChartVectorDTO> toChartVectorDTOs(List<ChartVectorVO> chartVectorVOList)
-//	{
-//		List<ChartVectorDTO> chartVectorDTOList = null;
-//		if(chartVectorVOList != null)
-//		{
-//			chartVectorDTOList = new ArrayList<ChartVectorDTO>();
-//			for(ChartVectorVO instrumentData : chartVectorVOList)
-//			{
-//				chartVectorDTOList.add(ChartVectorDTOMapper.toChartVectorDTO(instrumentData));
-//			}
-//		}
-//		return chartVectorDTOList;
-//	}
 	
 }

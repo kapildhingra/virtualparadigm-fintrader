@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.joda.time.PeriodType;
 
-public enum SampleDataFrequency implements Serializable
+public enum SampleCLOFrequency implements Serializable
 {
 	MILLISECOND(PeriodType.millis()), 
 	SECOND(PeriodType.seconds()), 
@@ -15,7 +15,7 @@ public enum SampleDataFrequency implements Serializable
 	MONTH(PeriodType.months()), 
 	YEAR(PeriodType.years());
 	
-    private SampleDataFrequency(PeriodType periodType)
+    private SampleCLOFrequency(PeriodType periodType)
     {
         this.periodType = periodType;
     }
@@ -27,9 +27,9 @@ public enum SampleDataFrequency implements Serializable
     	return this.periodType;
     }
     
-    public static SampleDataFrequency getSampleFrequency(String strPeriodType)
+    public static SampleCLOFrequency getSampleFrequency(String strPeriodType)
     {
-    	return SampleDataFrequency.valueOf(strPeriodType.toUpperCase());
+    	return SampleCLOFrequency.valueOf(strPeriodType.toUpperCase());
     }
 }
 

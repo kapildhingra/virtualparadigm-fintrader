@@ -12,8 +12,10 @@ import org.joda.time.Interval;
 import com.virtualparadigm.fintrader.app.chart.service.impl.persistence.ChartRecord;
 import com.virtualparadigm.fintrader.app.chart.service.impl.persistence.SampleRecord;
 import com.virtualparadigm.fintrader.app.chart.service.impl.persistence.SampleVectorRecord;
-import com.vparadigm.shared.finance.chart.Chart;
-import com.vparadigm.shared.finance.chart.ChartUserSpace;
+import com.vparadigm.shared.finance.ts.Chart;
+import com.vparadigm.shared.finance.ts.IChartSpace;
+import com.vparadigm.shared.finance.ts.IUserSpace;
+import com.vparadigm.shared.finance.ts.SimpleUserSpace;
 import com.vparadigm.shared.ts.IDiscreteTimeSeries;
 import com.vparadigm.shared.ts.SampleFrequency;
 
@@ -26,13 +28,12 @@ public class ChartMapper
 		Chart chart = null;
 		if(chartRecord != null)
 		{
-			ChartUserSpace chartUserSpace = new ChartUserSpace(chartRecord.getUserspace());
+			IUserSpace userSpace = new SimpleUserSpace(chartRecord.getUserspace());
+			IChartSpace chartSpace = userSpace.createChartSpace(SampleFrequency.valueOf(chartRecord.getSampleRecordFrequency().name()));
 			if(sampleVectorList == null || sampleVectorList.size() == 0)
 			{
 				chart = 
-						chartUserSpace.createChart(
-								SampleFrequency.valueOf(
-										chartRecord.getSampleRecordFrequency().name()), 
+						chartSpace.createChart( 
 								chartRecord.getSymbol(), 
 								chartRecord.getChartName(), 
 								new Interval(0, Instant.now().toEpochMilli()));
@@ -43,9 +44,7 @@ public class ChartMapper
 				SampleVectorRecord lastSampleVectorData = sampleVectorList.get(sampleVectorList.size()-1);
 				
 				chart = 
-						chartUserSpace.createChart(
-								SampleFrequency.valueOf(
-										chartRecord.getSampleRecordFrequency().name()), 
+						chartSpace.createChart(
 								chartRecord.getSymbol(), 
 								chartRecord.getChartName(), 
 								new Interval(firstSampleVectorData.getGmtTimestamp(), lastSampleVectorData.getGmtTimestamp()));

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.virtualparadigm.fintrader.app.chart.service.api.ChartVectorDTO;
-import com.vparadigm.shared.finance.chart.Chart;
+import com.vparadigm.shared.finance.ts.Chart;
 
 public class ChartVectorDTOMapper
 {

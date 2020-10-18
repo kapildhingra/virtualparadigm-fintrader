@@ -7,9 +7,9 @@ import java.util.Map;
 
 import com.virtualparadigm.fintrader.app.chart.service.api.ChartVectorDTO;
 import com.virtualparadigm.fintrader.tool.chartloader.delegate.ChartVectorVO;
-import com.vparadigm.shared.finance.chart.Chart;
+import com.vparadigm.shared.finance.ts.Chart;
 
-public class ChartVectorDataMapper
+public class ChartVectorCLOMapper
 {
 	private static final String UNIT_OF_MEASURE_DOLLAR = "currency/dollar";
 	private static final String UNIT_OF_MEASURE_COUNT = "count";
@@ -26,31 +26,31 @@ public class ChartVectorDataMapper
 	
 	public static Map<String, String> getUnitOfMeasureMapping()
 	{
-		return ChartVectorDataMapper.unitOfMeasureMapping;
+		return ChartVectorCLOMapper.unitOfMeasureMapping;
 	}
 	
-	public static ChartVectorData toChartVectorData(ChartVectorVO chartVectorVO)
+	public static ChartVectorCLO toChartVectorCLO(ChartVectorVO chartVectorVO)
 	{
-		ChartVectorData chartVectorData = null;
+		ChartVectorCLO chartVectorData = null;
 		if(chartVectorVO != null)
 		{
 			chartVectorData = 
-					new ChartVectorData(
+					new ChartVectorCLO(
 							chartVectorVO.getDateTime(),
 							chartVectorVO.getValues());
 		}
 		return chartVectorData;
 	}
 	
-	public static List<ChartVectorData> toChartVectorDatas(List<ChartVectorVO> chartVectorVOList)
+	public static List<ChartVectorCLO> toChartVectorCLOs(List<ChartVectorVO> chartVectorVOList)
 	{
-		List<ChartVectorData> chartVectorDataList = null;
+		List<ChartVectorCLO> chartVectorDataList = null;
 		if(chartVectorVOList != null)
 		{
-			chartVectorDataList = new ArrayList<ChartVectorData>();
+			chartVectorDataList = new ArrayList<ChartVectorCLO>();
 			for(ChartVectorVO instrumentData : chartVectorVOList)
 			{
-				chartVectorDataList.add(ChartVectorDataMapper.toChartVectorData(instrumentData));
+				chartVectorDataList.add(ChartVectorCLOMapper.toChartVectorCLO(instrumentData));
 			}
 		}
 		return chartVectorDataList;

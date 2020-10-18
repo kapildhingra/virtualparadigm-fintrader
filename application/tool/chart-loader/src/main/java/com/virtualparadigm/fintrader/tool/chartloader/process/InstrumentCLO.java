@@ -4,22 +4,25 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class InstrumentData implements Serializable
+public class InstrumentCLO implements Serializable
 {
 	private static final long serialVersionUID = 1L;
-	@JsonProperty("exchange")
-	private String exchange;
+	
+	@JsonProperty("mic")
+	private String mic;
+	
 	@JsonProperty("symbol")
 	private String symbol;
-	public InstrumentData(String exchange, String symbol)
+	
+	public InstrumentCLO(String exchange, String symbol)
 	{
 		super();
-		this.exchange = exchange;
+		this.mic = exchange;
 		this.symbol = symbol;
 	}
-	public String getExchange()
+	public String getMic()
 	{
-		return exchange;
+		return mic;
 	}
 	public String getSymbol()
 	{

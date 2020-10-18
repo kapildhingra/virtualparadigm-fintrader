@@ -26,8 +26,10 @@ import com.virtualparadigm.fintrader.app.chart.service.impl.persistence.SampleRe
 import com.virtualparadigm.fintrader.app.chart.service.impl.persistence.SampleVectorRecord;
 import com.vparadigm.shared.comp.common.logging.VParadigmLogger;
 import com.vparadigm.shared.comp.common.validate.VParadigmValidator;
-import com.vparadigm.shared.finance.chart.Chart;
-import com.vparadigm.shared.finance.chart.ChartUserSpace;
+import com.vparadigm.shared.finance.ts.Chart;
+import com.vparadigm.shared.finance.ts.IChartSpace;
+import com.vparadigm.shared.finance.ts.IUserSpace;
+import com.vparadigm.shared.finance.ts.SimpleUserSpace;
 import com.vparadigm.shared.ts.IDiscreteTimeSeries;
 import com.vparadigm.shared.ts.SampleFrequency;
 
@@ -52,7 +54,7 @@ public class ChartServiceImpl implements ChartService
 		String foundUserSpace = this.chartRepositoryDAO.getUserSpace(userSpace);
 		if(StringUtils.isNotEmpty(foundUserSpace))
 		{
-			ChartUserSpace chartUserSpace = ChartUserSpaceMapper.toChartUserSpace(foundUserSpace);
+			SimpleUserSpace chartUserSpace = ChartUserSpaceMapper.toChartUserSpace(foundUserSpace);
 			userSpaceDTO = UserSpaceDTOMapper.toUserSpaceDTO(chartUserSpace);
 		}
 		return userSpaceDTO;
@@ -62,7 +64,7 @@ public class ChartServiceImpl implements ChartService
 	public Collection<UserSpaceDTO> findUserSpaces()
 	{
 		Collection<String> foundUserSpaces = this.chartRepositoryDAO.getUserSpaces();
-		Collection<ChartUserSpace> chartUserSpaces = ChartUserSpaceMapper.toChartUserSpaces(foundUserSpaces);
+		Collection<SimpleUserSpace> chartUserSpaces = ChartUserSpaceMapper.toChartUserSpaces(foundUserSpaces);
 		return UserSpaceDTOMapper.toUserSpaceDTOs(chartUserSpaces);
 	}
 
@@ -81,7 +83,7 @@ public class ChartServiceImpl implements ChartService
 		{
 			LOGGER.trace("created userSpace: " + userSpace + " already exists");
 		}
-		ChartUserSpace chartUserSpace = ChartUserSpaceMapper.toChartUserSpace(userSpace);
+		SimpleUserSpace chartUserSpace = ChartUserSpaceMapper.toChartUserSpace(userSpace);
 		return UserSpaceDTOMapper.toUserSpaceDTO(chartUserSpace);
 	}
 
@@ -273,11 +275,11 @@ public class ChartServiceImpl implements ChartService
 			
 			Interval chartInterval = ChartServiceImpl.getMaxFitInterval(foundSampleVectorRecordList, chartVectors);
 			
-			ChartUserSpace chartUserSpace = new ChartUserSpace(chartRecord.getUserspace());
-
+//			SimpleUserSpace chartUserSpace = new SimpleUserSpace(chartRecord.getUserspace());
+			IUserSpace userSpace = new SimpleUserSpace(chartRecord.getUserspace());
+			IChartSpace chartSpace = userSpace.createChartSpace(SampleFrequency.valueOf(chartRecord.getSampleRecordFrequency().name()));
 			Chart chart = 
-					chartUserSpace.createChart(
-							SampleFrequency.valueOf(chartRecord.getSampleRecordFrequency().name()), 
+					chartSpace.createChart(
 							chartRecord.getSymbol(), 
 							chartRecord.getChartName(), 
 							chartInterval);

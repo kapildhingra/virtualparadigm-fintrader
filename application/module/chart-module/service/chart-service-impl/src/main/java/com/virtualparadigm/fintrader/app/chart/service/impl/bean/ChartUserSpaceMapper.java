@@ -6,26 +6,26 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.vparadigm.shared.finance.chart.ChartUserSpace;
+import com.vparadigm.shared.finance.ts.SimpleUserSpace;
 
 public class ChartUserSpaceMapper
 {
-	public static ChartUserSpace toChartUserSpace(String userSpace)
+	public static SimpleUserSpace toChartUserSpace(String userSpace)
 	{
-		ChartUserSpace chartUserSpace = null;
+		SimpleUserSpace chartUserSpace = null;
 		if(StringUtils.isNotEmpty(userSpace))
 		{
-			chartUserSpace = new ChartUserSpace(userSpace);
+			chartUserSpace = new SimpleUserSpace(userSpace);
 		}
 		return chartUserSpace;
 	}
 	
-	public static Collection<ChartUserSpace> toChartUserSpaces(Collection<String> userSpaces)
+	public static Collection<SimpleUserSpace> toChartUserSpaces(Collection<String> userSpaces)
 	{
-		List<ChartUserSpace> chartUserSpaceList = null;
+		List<SimpleUserSpace> chartUserSpaceList = null;
 		if(userSpaces != null)
 		{
-			chartUserSpaceList = new ArrayList<ChartUserSpace>();
+			chartUserSpaceList = new ArrayList<SimpleUserSpace>();
 			for(String userSpace : userSpaces)
 			{
 				chartUserSpaceList.add(ChartUserSpaceMapper.toChartUserSpace(userSpace));

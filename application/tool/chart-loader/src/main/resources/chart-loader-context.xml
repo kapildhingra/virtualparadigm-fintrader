@@ -12,6 +12,11 @@
 	<context:property-placeholder location="classpath:chart-loader.properties"/>
 	
 	<bean id="chartLoader" class="com.virtualparadigm.fintrader.tool.chartloader.process.ChartLoaderImpl" autowire="byType"/>
+	
+	<bean id="marketReferenceDelgate" class="com.virtualparadigm.fintrader.tool.chartloader.delegate.MarketReferenceDelegateCSVFileImpl" autowire="byType">
+		<constructor-arg index="0" value="${chartloader.delegate.market.csv.file.path}" />
+	</bean>
+	
 	<bean id="instrumentReferenceDelegate" class="com.virtualparadigm.fintrader.tool.chartloader.delegate.InstrumentReferenceDelegateIEXImpl" />
 <!-- 	
 	<bean id="chartDelegate" class="com.virtualparadigm.fintrader.tool.chartloader.delegate.ChartDelegateAlphaVantageImpl" />

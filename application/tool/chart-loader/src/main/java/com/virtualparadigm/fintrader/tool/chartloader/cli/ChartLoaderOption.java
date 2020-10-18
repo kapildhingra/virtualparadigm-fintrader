@@ -8,14 +8,14 @@ public enum ChartLoaderOption
 {
 	USERSPACE("u", "userspace", "userspace", true), 
 	CHART_NAME("n", "chartname", "chartname", true), 
-	EXCHANGE("e", "exchange", "exchange", true), 
-	SYMBOLS("ss", "symbols", "symbols", false), 
+	MARKET("m", "market", "market", true), 
 	SYMBOL("s", "symbol", "symbol", true), 
 	SAMPLE_FREQUENCY("f", "frequency", "frequency", true), 
 	START_TIME("st", "start", "start", true), 
 	END_TIME("et", "end", "end", true),
 	INPUT_FILE("i", "input", "input", true),
-	OUTPUT_FILE("o", "output", "output", true);
+	OUTPUT_FILE("o", "output", "output", true),
+	JSON_FORMAT("j", "json", "json", false);
 	
 	private static final Map<String, ChartLoaderOption> lookupMap = new HashMap<String, ChartLoaderOption>();
 	static

@@ -84,6 +84,11 @@
 			<artifactId>influxdb-java</artifactId>
 		</dependency>
 		
+		<dependency>
+			<groupId>com.ibm.icu</groupId>
+			<artifactId>icu4j</artifactId>
+		</dependency>
+		
 	</dependencies>
 
 	<build>

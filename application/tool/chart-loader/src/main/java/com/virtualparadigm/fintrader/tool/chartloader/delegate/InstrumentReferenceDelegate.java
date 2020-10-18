@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface InstrumentReferenceDelegate
 {
-	List<ExchangeVO> getExchanges();
+	List<String> getExchanges();
 	List<String> getSectors();
 	List<String> getIndexes();
 	List<InstrumentVO> getInstrumentsByExchange(String exchange);

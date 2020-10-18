@@ -8,7 +8,7 @@ import java.util.Set;
 
 import com.virtualparadigm.fintrader.app.chart.service.impl.persistence.SampleRecord;
 import com.virtualparadigm.fintrader.app.chart.service.impl.persistence.SampleVectorRecord;
-import com.vparadigm.shared.finance.chart.Chart;
+import com.vparadigm.shared.finance.ts.Chart;
 
 public class SampleVectorRecordMapper
 {

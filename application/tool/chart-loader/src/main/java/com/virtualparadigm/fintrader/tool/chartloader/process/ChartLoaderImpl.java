@@ -16,6 +16,8 @@ import com.virtualparadigm.fintrader.app.chart.service.api.UserSpaceDTO;
 import com.virtualparadigm.fintrader.tool.chartloader.delegate.ChartDelegate;
 import com.virtualparadigm.fintrader.tool.chartloader.delegate.ChartVectorVO;
 import com.virtualparadigm.fintrader.tool.chartloader.delegate.InstrumentReferenceDelegate;
+import com.virtualparadigm.fintrader.tool.chartloader.delegate.MarketReferenceDelegate;
+import com.virtualparadigm.fintrader.tool.chartloader.delegate.MarketVO;
 import com.vparadigm.shared.comp.common.logging.VParadigmLogger;
 import com.vparadigm.shared.comp.common.validate.VParadigmValidator;
 
@@ -35,6 +37,9 @@ public class ChartLoaderImpl implements ChartLoader
 	
 	
 	@Inject
+	private MarketReferenceDelegate marketRefenceDelegate;
+	
+	@Inject
 	private InstrumentReferenceDelegate instrumentRefenceDelegate;
 	
 	@Inject
@@ -49,17 +54,17 @@ public class ChartLoaderImpl implements ChartLoader
 	}
 	
 	@Override
-	public List<InstrumentData> pullInstruments()
+	public List<InstrumentCLO> pullInstruments()
 	{
-		List<InstrumentData> instrumentList = null;
+		List<InstrumentCLO> instrumentList = null;
 		List<String> exchanges = this.instrumentRefenceDelegate.getExchanges();
 		if(exchanges != null)
 		{
-			instrumentList = new ArrayList<InstrumentData>();
-			List<InstrumentData> foundInstruments = null;
+			instrumentList = new ArrayList<InstrumentCLO>();
+			List<InstrumentCLO> foundInstruments = null;
 			for(String exchange : exchanges)
 			{
-				foundInstruments = InstrumentDataMapper.toInstrumentDatas(this.instrumentRefenceDelegate.getInstrumentsByExchange(exchange));
+				foundInstruments = InstrumentCLOMapper.toInstrumentCLOs(this.instrumentRefenceDelegate.getInstrumentsByExchange(exchange));
 				LOGGER.info("found exchange: " + exchange + " with " + ((foundInstruments != null) ? foundInstruments.size() : "0") + " instruments");
 				instrumentList.addAll(foundInstruments);
 			}
@@ -68,17 +73,29 @@ public class ChartLoaderImpl implements ChartLoader
 	}
 
 	@Override
-	public List<ChartVectorData> pullChart(String exchange, String symbol, SampleDataFrequency sampleDataFrequency, LocalDateTime startTime,
+	public ChartCLO pullChart(String mic, String symbol, SampleCLOFrequency sampleDataFrequency, LocalDateTime startTime,
 			LocalDateTime endTime)
 	{
 		VParadigmValidator.validateNotEmpty("symbol", symbol);
 		VParadigmValidator.validateNotNull("sampleDataFrequency", sampleDataFrequency);
 		List<ChartVectorVO> chartVectorVOList =  this.instrumentDataDelegate.getChartVectors(symbol, SampleDTOFrequency.valueOf(sampleDataFrequency.name()), startTime, endTime);
-		return ChartVectorDataMapper.toChartVectorDatas(chartVectorVOList);
+		ChartCLO chartCLO = new ChartCLO(mic, symbol, sampleDataFrequency, ChartVectorCLOMapper.toChartVectorCLOs(chartVectorVOList));
+		return chartCLO;
+	}
+	
+	
+	@Override
+	public List<MarketCLO> pullMarkets()
+	{
+		List<MarketVO> marketVOs = marketRefenceDelegate.getMarkets();
+		return MarketCLOMapper.toMarketCLOs(marketVOs);
 	}
 
+	
+	
+
 	@Override
-	public void loadChart(String userSpace, String chartName, String exchange, String symbol, SampleDataFrequency sampleDataFrequency, List<ChartVectorData> chartVectorDataList)
+	public void loadChart(String userSpace, String chartName, String exchange, String symbol, SampleCLOFrequency sampleDataFrequency, List<ChartVectorCLO> chartVectorDataList)
 	{
 		VParadigmValidator.validateNotEmpty("exchange", exchange);
 		VParadigmValidator.validateNotEmpty("symbol", symbol);
@@ -146,7 +163,7 @@ public class ChartLoaderImpl implements ChartLoader
 	}
 
 	@Override
-	public List<ChartVectorVO> queryChart(String userSpace, String chartName, String exchange, String symbol, SampleDataFrequency sampleDataFrequency)
+	public List<ChartVectorCLO> queryChart(String userSpace, String chartName, String exchange, String symbol, SampleCLOFrequency sampleDataFrequency)
 	{
 		// TODO Auto-generated method stub
 		return null;

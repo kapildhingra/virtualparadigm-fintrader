@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
-public class ChartVectorData implements Serializable
+public class ChartVectorCLO implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -23,19 +23,19 @@ public class ChartVectorData implements Serializable
     
     Map<String, BigDecimal> valuesMap = new LinkedHashMap<String, BigDecimal>();
     
-	public ChartVectorData()
+	public ChartVectorCLO()
 	{
 		super();
 	}
 
-	public ChartVectorData(LocalDateTime dateTime, Map<String, BigDecimal> valuesMap)
+	public ChartVectorCLO(LocalDateTime dateTime, Map<String, BigDecimal> valuesMap)
 	{
 		super();
 		this.dateTime = dateTime;
 		this.valuesMap = valuesMap;
 	}
 	
-	public ChartVectorData(LocalDateTime dateTime, BigDecimal open, BigDecimal high, BigDecimal low, BigDecimal close, BigDecimal volume)
+	public ChartVectorCLO(LocalDateTime dateTime, BigDecimal open, BigDecimal high, BigDecimal low, BigDecimal close, BigDecimal volume)
 	{
 		super();
 		this.dateTime = dateTime;

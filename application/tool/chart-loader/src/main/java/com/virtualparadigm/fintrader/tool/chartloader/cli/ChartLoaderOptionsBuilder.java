@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 
-import com.virtualparadigm.fintrader.tool.chartloader.delegate.ChartVectorVO;
 import com.virtualparadigm.fintrader.tool.chartloader.util.FormatUtil;
 
 public class ChartLoaderOptionsBuilder
@@ -18,41 +17,56 @@ public class ChartLoaderOptionsBuilder
 		{
 			switch(instrumentLoaderCommand)
 			{
-				case SYMBOLS:
+				case PULL_MARKETS:
 				{
-					cliOptions = ChartLoaderOptionsBuilder.buildSymbolsCommandLineOptions();
+					cliOptions = ChartLoaderOptionsBuilder.buildPullMarketsCommandLineOptions();
 					break;
 				}
-				case PULL:
+				case PULL_SYMBOLS:
 				{
-					cliOptions = ChartLoaderOptionsBuilder.buildPullCommandLineOptions();
+					cliOptions = ChartLoaderOptionsBuilder.buildPullSymbolsCommandLineOptions();
 					break;
 				}
-				case LOAD:
+				case PULL_CHART:
 				{
-					cliOptions = ChartLoaderOptionsBuilder.buildLoadCommandLineOptions();
+					cliOptions = ChartLoaderOptionsBuilder.buildPullChartCommandLineOptions();
 					break;
 				}
-				case QUERY:
+				case PEEK_MARKETS:
+				{
+					cliOptions = ChartLoaderOptionsBuilder.buildPeekMarketsCommandLineOptions();
+					break;
+				}
+				case PEEK_SYMBOLS:
+				{
+					cliOptions = ChartLoaderOptionsBuilder.buildPeekSymbolsCommandLineOptions();
+					break;
+				}
+				case PEEK_CHART:
+				{
+					cliOptions = ChartLoaderOptionsBuilder.buildPeekChartCommandLineOptions();
+					break;
+				}
+				case LOAD_CHART:
+				{
+					cliOptions = ChartLoaderOptionsBuilder.buildLoadChartCommandLineOptions();
+					break;
+				}
+				case QUERY_CHART:
 				{
 					cliOptions = ChartLoaderOptionsBuilder.buildQueryCommandLineOptions();
 					break;
 				}
-				case PEEK:
-				{
-					cliOptions = ChartLoaderOptionsBuilder.buildPeekCommandLineOptions();
-					break;
-				}
 				default:
 				{
-					cliOptions = ChartLoaderOptionsBuilder.buildSymbolsCommandLineOptions();
+					cliOptions = ChartLoaderOptionsBuilder.buildPullMarketsCommandLineOptions();
 				}
 			}
 		}
 		return cliOptions;
 	}
 	
-	private static Options buildSymbolsCommandLineOptions()
+	private static Options buildPullMarketsCommandLineOptions()
 	{
 		Options cliOptions = new Options();
 		
@@ -63,17 +77,48 @@ public class ChartLoaderOptionsBuilder
 					.desc(ChartLoaderOption.OUTPUT_FILE.getDescription())
 					.hasArg()
 					.build());
+		
+		cliOptions.addOption(
+				Option.builder(
+					ChartLoaderOption.JSON_FORMAT.getShortName())
+					.longOpt(ChartLoaderOption.JSON_FORMAT.getLongName())
+					.desc(ChartLoaderOption.JSON_FORMAT.getDescription())
+					.build());
+		
 		return cliOptions;
 	}
 	
-	private static Options buildPullCommandLineOptions()
+	private static Options buildPullSymbolsCommandLineOptions()
 	{
 		Options cliOptions = new Options();
+		
 		cliOptions.addOption(
 				Option.builder(
-					ChartLoaderOption.EXCHANGE.getShortName())
-					.longOpt(ChartLoaderOption.EXCHANGE.getLongName())
-					.desc(ChartLoaderOption.EXCHANGE.getDescription())
+					ChartLoaderOption.OUTPUT_FILE.getShortName())
+					.longOpt(ChartLoaderOption.OUTPUT_FILE.getLongName())
+					.desc(ChartLoaderOption.OUTPUT_FILE.getDescription())
+					.hasArg()
+					.build());
+		
+		cliOptions.addOption(
+				Option.builder(
+					ChartLoaderOption.JSON_FORMAT.getShortName())
+					.longOpt(ChartLoaderOption.JSON_FORMAT.getLongName())
+					.desc(ChartLoaderOption.JSON_FORMAT.getDescription())
+					.build());
+		
+		return cliOptions;
+	}
+	
+	private static Options buildPullChartCommandLineOptions()
+	{
+		Options cliOptions = new Options();
+		
+		cliOptions.addOption(
+				Option.builder(
+					ChartLoaderOption.MARKET.getShortName())
+					.longOpt(ChartLoaderOption.MARKET.getLongName())
+					.desc(ChartLoaderOption.MARKET.getDescription())
 					.hasArg()
 					.required()
 					.build());
@@ -119,52 +164,20 @@ public class ChartLoaderOptionsBuilder
 					.desc(ChartLoaderOption.OUTPUT_FILE.getDescription())
 					.hasArg()
 					.build());
+		
+		cliOptions.addOption(
+				Option.builder(
+					ChartLoaderOption.JSON_FORMAT.getShortName())
+					.longOpt(ChartLoaderOption.JSON_FORMAT.getLongName())
+					.desc(ChartLoaderOption.JSON_FORMAT.getDescription())
+					.build());
+		
 		return cliOptions;
 	}
 	
-	private static Options buildLoadCommandLineOptions()
+	private static Options buildPeekMarketsCommandLineOptions()
 	{
 		Options cliOptions = new Options();
-		cliOptions.addOption(
-				Option.builder(
-					ChartLoaderOption.USERSPACE.getShortName())
-					.longOpt(ChartLoaderOption.USERSPACE.getLongName())
-					.desc(ChartLoaderOption.USERSPACE.getDescription())
-					.hasArg()
-					//.required()
-					.build());
-		cliOptions.addOption(
-				Option.builder(
-					ChartLoaderOption.CHART_NAME.getShortName())
-					.longOpt(ChartLoaderOption.CHART_NAME.getLongName())
-					.desc(ChartLoaderOption.CHART_NAME.getDescription())
-					.hasArg()
-					//.required()
-					.build());
-		cliOptions.addOption(
-				Option.builder(
-					ChartLoaderOption.EXCHANGE.getShortName())
-					.longOpt(ChartLoaderOption.EXCHANGE.getLongName())
-					.desc(ChartLoaderOption.EXCHANGE.getDescription())
-					.hasArg()
-					.required()
-					.build());
-		cliOptions.addOption(
-				Option.builder(
-					ChartLoaderOption.SYMBOL.getShortName())
-					.longOpt(ChartLoaderOption.SYMBOL.getLongName())
-					.desc(ChartLoaderOption.SYMBOL.getDescription())
-					.hasArg()
-					.required()
-					.build());
-		cliOptions.addOption(
-				Option.builder(
-					ChartLoaderOption.SAMPLE_FREQUENCY.getShortName())
-					.longOpt(ChartLoaderOption.SAMPLE_FREQUENCY.getLongName())
-					.desc(ChartLoaderOption.SAMPLE_FREQUENCY.getDescription())
-					.hasArg()
-					.required()
-					.build());
 		cliOptions.addOption(
 				Option.builder(
 					ChartLoaderOption.INPUT_FILE.getShortName())
@@ -173,18 +186,58 @@ public class ChartLoaderOptionsBuilder
 					.hasArg()
 					.build());
 		return cliOptions;
-	}	
+	}
+	
+	private static Options buildPeekSymbolsCommandLineOptions()
+	{
+		Options cliOptions = new Options();
+		cliOptions.addOption(
+				Option.builder(
+					ChartLoaderOption.INPUT_FILE.getShortName())
+					.longOpt(ChartLoaderOption.INPUT_FILE.getLongName())
+					.desc(ChartLoaderOption.INPUT_FILE.getDescription())
+					.hasArg()
+					.build());
+		return cliOptions;
+	}
+	
+	private static Options buildPeekChartCommandLineOptions()
+	{
+		Options cliOptions = new Options();
+		cliOptions.addOption(
+				Option.builder(
+					ChartLoaderOption.INPUT_FILE.getShortName())
+					.longOpt(ChartLoaderOption.INPUT_FILE.getLongName())
+					.desc(ChartLoaderOption.INPUT_FILE.getDescription())
+					.hasArg()
+					.build());
+		return cliOptions;
+	}
+	
+	private static Options buildLoadChartCommandLineOptions()
+	{
+		Options cliOptions = new Options();
+		cliOptions.addOption(
+				Option.builder(
+					ChartLoaderOption.INPUT_FILE.getShortName())
+					.longOpt(ChartLoaderOption.INPUT_FILE.getLongName())
+					.desc(ChartLoaderOption.INPUT_FILE.getDescription())
+					.hasArg()
+					.build());
+		return cliOptions;
+	}
+	
 	
 	private static Options buildQueryCommandLineOptions()
 	{
 		Options cliOptions = new Options();
 		cliOptions.addOption(
 				Option.builder(
-					ChartLoaderOption.EXCHANGE.getShortName())
-					.longOpt(ChartLoaderOption.EXCHANGE.getLongName())
-					.desc(ChartLoaderOption.EXCHANGE.getDescription())
+					ChartLoaderOption.MARKET.getShortName())
+					.longOpt(ChartLoaderOption.MARKET.getLongName())
+					.desc(ChartLoaderOption.MARKET.getDescription())
 					.hasArg()
-					.required()
+					//.required()
 					.build());
 		cliOptions.addOption(
 				Option.builder(
@@ -226,19 +279,58 @@ public class ChartLoaderOptionsBuilder
 		return cliOptions;
 	}
 	
-	
-	private static Options buildPeekCommandLineOptions()
-	{
-		Options cliOptions = new Options();
-		cliOptions.addOption(
-				Option.builder(
-					ChartLoaderOption.INPUT_FILE.getShortName())
-					.longOpt(ChartLoaderOption.INPUT_FILE.getLongName())
-					.desc(ChartLoaderOption.INPUT_FILE.getDescription())
-					.hasArg()
-					.build());
-		return cliOptions;
-	}
+//	private static Options buildLoadCommandLineOptions()
+//	{
+//		Options cliOptions = new Options();
+//		cliOptions.addOption(
+//				Option.builder(
+//					ChartLoaderOption.USERSPACE.getShortName())
+//					.longOpt(ChartLoaderOption.USERSPACE.getLongName())
+//					.desc(ChartLoaderOption.USERSPACE.getDescription())
+//					.hasArg()
+//					//.required()
+//					.build());
+//		cliOptions.addOption(
+//				Option.builder(
+//					ChartLoaderOption.CHART_NAME.getShortName())
+//					.longOpt(ChartLoaderOption.CHART_NAME.getLongName())
+//					.desc(ChartLoaderOption.CHART_NAME.getDescription())
+//					.hasArg()
+//					//.required()
+//					.build());
+//		cliOptions.addOption(
+//				Option.builder(
+//					ChartLoaderOption.MARKET.getShortName())
+//					.longOpt(ChartLoaderOption.MARKET.getLongName())
+//					.desc(ChartLoaderOption.MARKET.getDescription())
+//					.hasArg()
+//					.required()
+//					.build());
+//		cliOptions.addOption(
+//				Option.builder(
+//					ChartLoaderOption.SYMBOL.getShortName())
+//					.longOpt(ChartLoaderOption.SYMBOL.getLongName())
+//					.desc(ChartLoaderOption.SYMBOL.getDescription())
+//					.hasArg()
+//					.required()
+//					.build());
+//		cliOptions.addOption(
+//				Option.builder(
+//					ChartLoaderOption.SAMPLE_FREQUENCY.getShortName())
+//					.longOpt(ChartLoaderOption.SAMPLE_FREQUENCY.getLongName())
+//					.desc(ChartLoaderOption.SAMPLE_FREQUENCY.getDescription())
+//					.hasArg()
+//					.required()
+//					.build());
+//		cliOptions.addOption(
+//				Option.builder(
+//					ChartLoaderOption.INPUT_FILE.getShortName())
+//					.longOpt(ChartLoaderOption.INPUT_FILE.getLongName())
+//					.desc(ChartLoaderOption.INPUT_FILE.getDescription())
+//					.hasArg()
+//					.build());
+//		return cliOptions;
+//	}	
 	
 	
 	public static void main(String[] args)

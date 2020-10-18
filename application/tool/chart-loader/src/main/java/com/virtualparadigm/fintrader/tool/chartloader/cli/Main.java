@@ -24,10 +24,12 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.virtualparadigm.fintrader.tool.chartloader.delegate.ChartVectorVO;
+import com.virtualparadigm.fintrader.tool.chartloader.process.ChartCLO;
 import com.virtualparadigm.fintrader.tool.chartloader.process.ChartLoader;
-import com.virtualparadigm.fintrader.tool.chartloader.process.ChartVectorData;
-import com.virtualparadigm.fintrader.tool.chartloader.process.InstrumentData;
-import com.virtualparadigm.fintrader.tool.chartloader.process.SampleDataFrequency;
+import com.virtualparadigm.fintrader.tool.chartloader.process.ChartVectorCLO;
+import com.virtualparadigm.fintrader.tool.chartloader.process.InstrumentCLO;
+import com.virtualparadigm.fintrader.tool.chartloader.process.MarketCLO;
+import com.virtualparadigm.fintrader.tool.chartloader.process.SampleCLOFrequency;
 import com.virtualparadigm.fintrader.tool.chartloader.util.FormatUtil;
 import com.vparadigm.shared.comp.common.logging.VParadigmLogger;
 
@@ -71,18 +73,71 @@ public class Main
 						ChartLoader chartLoader = context.getBean(ChartLoader.class);
 						switch(instrumentLoaderCommand)
 						{
-							case SYMBOLS:
+							case PULL_MARKETS:
 							{
-								List<InstrumentData> instruments = chartLoader.pullInstruments();
-								if(instruments != null)
+								List<MarketCLO> marketCLOs = chartLoader.pullMarkets();
+								if(marketCLOs != null)
 								{
+									boolean isJsonFormat = cmd.hasOption(ChartLoaderOption.JSON_FORMAT.getLongName());
 									String strOutputFile = cmd.getOptionValue(ChartLoaderOption.OUTPUT_FILE.getLongName());
 									if(StringUtils.isEmpty(strOutputFile))
 									{
-										for(InstrumentData instrument : instruments)
+										if(isJsonFormat)
 										{
-											logger.trace("exchange:" + instrument.getExchange() + ", symbol:" + instrument.getSymbol());
-											System.out.println("exchange:" + instrument.getExchange() + ", symbol:" + instrument.getSymbol());
+											ObjectMapper mapper = new ObjectMapper();
+										    mapper.writeValue(System.out, marketCLOs);	
+										}
+										for(MarketCLO marketCLO : marketCLOs)
+										{
+											System.out.println("mic:" + marketCLO.getMarketIdentifierCode() + ", timezone:" + marketCLO.getDateTimeZone());
+										}
+									}
+									else
+									{
+										File outputFile = new File(strOutputFile);
+										logger.info("writing to file: " + strOutputFile);
+										if(strOutputFile.endsWith(".csv"))
+										{
+											StringBuffer outputBuffer = new StringBuffer();
+											outputBuffer.append("MIC" + CSV_DELIMITER + "Timezone\n");
+											for(MarketCLO marketCLO : marketCLOs)
+											{
+												outputBuffer.append(marketCLO.getMarketIdentifierCode());
+												outputBuffer.append(",");
+												outputBuffer.append(marketCLO.getDateTimeZone());
+												outputBuffer.append("\n");
+											}
+											
+											FileUtils.writeStringToFile(outputFile, outputBuffer.toString());
+										}
+										else
+										{
+											ObjectMapper mapper = new ObjectMapper();
+										    mapper.writeValue(outputFile, marketCLOs);											
+										}
+										logger.info("done writing file");
+									}
+								}
+								break;
+							}
+							case PULL_SYMBOLS:
+							{
+								List<InstrumentCLO> instrumentCLOs = chartLoader.pullInstruments();
+								if(instrumentCLOs != null)
+								{
+									String strOutputFile = cmd.getOptionValue(ChartLoaderOption.OUTPUT_FILE.getLongName());
+									boolean isJsonFormat = cmd.hasOption(ChartLoaderOption.JSON_FORMAT.getLongName());
+									
+									if(StringUtils.isEmpty(strOutputFile))
+									{
+										if(isJsonFormat)
+										{
+											ObjectMapper mapper = new ObjectMapper();
+										    mapper.writeValue(System.out, instrumentCLOs);
+										}
+										for(InstrumentCLO instrument : instrumentCLOs)
+										{
+											System.out.println("mic:" + instrument.getMic() + ", symbol:" + instrument.getSymbol());
 										}
 									}
 									else
@@ -93,9 +148,9 @@ public class Main
 										{
 											StringBuffer outputBuffer = new StringBuffer();
 											outputBuffer.append("Exchange" + CSV_DELIMITER + "Symbol\n");
-											for(InstrumentData instrument : instruments)
+											for(InstrumentCLO instrument : instrumentCLOs)
 											{
-												outputBuffer.append(instrument.getExchange());
+												outputBuffer.append(instrument.getMic());
 												outputBuffer.append(",");
 												outputBuffer.append(instrument.getSymbol());
 												outputBuffer.append("\n");
@@ -106,18 +161,18 @@ public class Main
 										else
 										{
 											ObjectMapper mapper = new ObjectMapper();
-										    mapper.writeValue(outputFile, instruments);											
+										    mapper.writeValue(outputFile, instrumentCLOs);											
 										}
 										logger.info("done writing file");
 									}
 								}
 								break;
 							}
-							case PULL:
+							case PULL_CHART:
 							{
-								String strExchange = cmd.getOptionValue(ChartLoaderOption.EXCHANGE.getLongName());
+								String strExchange = cmd.getOptionValue(ChartLoaderOption.MARKET.getLongName());
 								String strSymbol = cmd.getOptionValue(ChartLoaderOption.SYMBOL.getLongName());
-								SampleDataFrequency sampleFrequency = SampleDataFrequency.valueOf(cmd.getOptionValue(ChartLoaderOption.SAMPLE_FREQUENCY.getLongName()).toUpperCase());
+								SampleCLOFrequency sampleFrequency = SampleCLOFrequency.valueOf(cmd.getOptionValue(ChartLoaderOption.SAMPLE_FREQUENCY.getLongName()).toUpperCase());
 								String strStartTime = cmd.getOptionValue(ChartLoaderOption.START_TIME.getLongName());
 								String strEndTime = cmd.getOptionValue(ChartLoaderOption.END_TIME.getLongName());
 								LocalDateTime startTime = null;
@@ -132,20 +187,20 @@ public class Main
 								}
 								String strOutputFile = cmd.getOptionValue(ChartLoaderOption.OUTPUT_FILE.getLongName());
 						
-								List<ChartVectorData> instrumentDataList = chartLoader.pullChart(strExchange, strSymbol, sampleFrequency, startTime, endTime);
+								ChartCLO chartCLO = chartLoader.pullChart(strExchange, strSymbol, sampleFrequency, startTime, endTime);
 
 								if(StringUtils.isEmpty(strOutputFile))
 								{
 									StringBuffer strBuf = null;
 									Map<String, BigDecimal> valueMap = null;
-									for(ChartVectorData instrumentData : instrumentDataList)
+									for(ChartVectorCLO chartVectorCLO : chartCLO.getChartVectorCLOList())
 									{
 										strBuf = new StringBuffer();
 										strBuf.append(ChartVectorVO.FIELD.DATETIME.name());
 										strBuf.append(Main.FIELD_VALUE_DELIMITER);
-										strBuf.append(instrumentData.getDateTime().format(FormatUtil.DATE_TIME_FORMATTER));
+										strBuf.append(chartVectorCLO.getDateTime().format(FormatUtil.DATE_TIME_FORMATTER));
 										
-										valueMap = instrumentData.getValues();
+										valueMap = chartVectorCLO.getValues();
 										if(valueMap != null && valueMap.size() > 0)
 										{
 											for(String key : valueMap.keySet())
@@ -180,19 +235,19 @@ public class Main
 										outputBuffer.append(ChartVectorVO.FIELD.VOLUME);
 										outputBuffer.append("\n");
 
-										for(ChartVectorData instrumentData : instrumentDataList)
+										for(ChartVectorCLO chartVectorCLO : chartCLO.getChartVectorCLOList())
 										{
-											outputBuffer.append(instrumentData.getDateTime().format(FormatUtil.DATE_TIME_FORMATTER));
+											outputBuffer.append(chartVectorCLO.getDateTime().format(FormatUtil.DATE_TIME_FORMATTER));
 											outputBuffer.append(CSV_DELIMITER);
-											outputBuffer.append(instrumentData.getOpen());
+											outputBuffer.append(chartVectorCLO.getOpen());
 											outputBuffer.append(CSV_DELIMITER);
-											outputBuffer.append(instrumentData.getHigh());
+											outputBuffer.append(chartVectorCLO.getHigh());
 											outputBuffer.append(CSV_DELIMITER);
-											outputBuffer.append(instrumentData.getLow());
+											outputBuffer.append(chartVectorCLO.getLow());
 											outputBuffer.append(CSV_DELIMITER);
-											outputBuffer.append(instrumentData.getClose());
+											outputBuffer.append(chartVectorCLO.getClose());
 											outputBuffer.append(CSV_DELIMITER);
-											outputBuffer.append(instrumentData.getVolume());
+											outputBuffer.append(chartVectorCLO.getVolume());
 											outputBuffer.append("\n");
 										}
 										FileUtils.writeStringToFile(outputFile, outputBuffer.toString());
@@ -200,21 +255,21 @@ public class Main
 									else
 									{
 										ObjectMapper mapper = new ObjectMapper();
-									    mapper.writeValue(outputFile, instrumentDataList);
+									    mapper.writeValue(outputFile, chartCLO);
 									}
 									logger.info("done writing file");
 								}
 								break;
 							}
-							case LOAD:
+							case LOAD_CHART:
 							{
 								String strUserSpace = cmd.getOptionValue(ChartLoaderOption.USERSPACE.getLongName());
 								String strChartName = cmd.getOptionValue(ChartLoaderOption.CHART_NAME.getLongName());
-								String strExchange = cmd.getOptionValue(ChartLoaderOption.EXCHANGE.getLongName());
+								String strExchange = cmd.getOptionValue(ChartLoaderOption.MARKET.getLongName());
 								String strSymbol = cmd.getOptionValue(ChartLoaderOption.SYMBOL.getLongName());
-								SampleDataFrequency sampleDataFrequency = SampleDataFrequency.valueOf(cmd.getOptionValue(ChartLoaderOption.SAMPLE_FREQUENCY.getLongName()).toUpperCase());
+								SampleCLOFrequency sampleDataFrequency = SampleCLOFrequency.valueOf(cmd.getOptionValue(ChartLoaderOption.SAMPLE_FREQUENCY.getLongName()).toUpperCase());
 								String strInputFile = cmd.getOptionValue(ChartLoaderOption.INPUT_FILE.getLongName());
-								List<ChartVectorData> chartVectorDataList = new ArrayList<ChartVectorData>();
+								List<ChartVectorCLO> chartVectorDataList = new ArrayList<ChartVectorCLO>();
 								
 								if(StringUtils.isNotEmpty(strInputFile))
 								{
@@ -229,7 +284,7 @@ public class Main
 										for(CSVRecord record : records)
 										{
 											chartVectorDataList.add(
-													new ChartVectorData(
+													new ChartVectorCLO(
 															LocalDateTime.parse(record.get(ChartVectorVO.FIELD.DATETIME.name()), FormatUtil.DATE_TIME_FORMATTER), 
 															new BigDecimal(record.get(ChartVectorVO.FIELD.OPEN.name())), 
 															new BigDecimal(record.get(ChartVectorVO.FIELD.HIGH.name())), 
@@ -241,7 +296,7 @@ public class Main
 									else
 									{
 										ObjectMapper mapper = new ObjectMapper();
-										chartVectorDataList = (List<ChartVectorData>)mapper.readValue(strInputFile, chartVectorDataList.getClass());
+										chartVectorDataList = (List<ChartVectorCLO>)mapper.readValue(strInputFile, chartVectorDataList.getClass());
 									}
 								}
 								else
@@ -273,12 +328,12 @@ public class Main
 
 								break;
 							}
-							case QUERY:
+							case QUERY_CHART:
 							{
 								
 								break;
 							}							
-							case PEEK:
+							case PEEK_CHART:
 							{
 								
 								break;

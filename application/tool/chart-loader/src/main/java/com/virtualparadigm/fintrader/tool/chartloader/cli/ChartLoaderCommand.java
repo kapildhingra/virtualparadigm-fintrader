@@ -6,15 +6,14 @@ import java.util.Map;
 
 public enum ChartLoaderCommand
 {
-	SYMBOLS("symbols", "symbols"),
-	PULL("pull", "pull"),
-	LOAD("load", "load"),
-	QUERY("query", "query"),
-	PEEK("peek", "peek");
-//	SYMBOLS("symbols", "symbols"),
-//	INSTRUMENT("instrument", "instrument"),
-//	CHART("chart", "chart"),
-//	LOAD("load", "load");
+	PULL_MARKETS("pull-markets", "pull-markets"),
+	PULL_SYMBOLS("pull-symbols", "pull-symbols"),
+	PULL_CHART("pull-chart", "pull-chart"),
+	PEEK_MARKETS("peek-markets", "peek-markets"),
+	PEEK_SYMBOLS("peek-symbols", "peek-symbols"),
+	PEEK_CHART("peek-chart", "peek-chart"),
+	LOAD_CHART("load-chart", "load-chart"),
+	QUERY_CHART("query-chart", "query-chart");
 	
 	private static final Map<String, ChartLoaderCommand> lookupMap = new HashMap<String, ChartLoaderCommand>();
 	static

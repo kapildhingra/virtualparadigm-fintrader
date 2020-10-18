@@ -5,11 +5,11 @@ import java.util.Collection;
 import java.util.List;
 
 import com.virtualparadigm.fintrader.app.chart.service.api.UserSpaceDTO;
-import com.vparadigm.shared.finance.chart.ChartUserSpace;
+import com.vparadigm.shared.finance.ts.SimpleUserSpace;
 
 public class UserSpaceDTOMapper
 {
-	public static UserSpaceDTO toUserSpaceDTO(ChartUserSpace chartUserSpace)
+	public static UserSpaceDTO toUserSpaceDTO(SimpleUserSpace chartUserSpace)
 	{
 		UserSpaceDTO userSpaceDTO = null;
 		if(chartUserSpace != null)
@@ -19,13 +19,13 @@ public class UserSpaceDTOMapper
 		return userSpaceDTO;
 	}
 	
-	public static Collection<UserSpaceDTO> toUserSpaceDTOs(Collection<ChartUserSpace> chartUserSpaces)
+	public static Collection<UserSpaceDTO> toUserSpaceDTOs(Collection<SimpleUserSpace> chartUserSpaces)
 	{
 		List<UserSpaceDTO> userSpaceDTOList = null;
 		if(chartUserSpaces != null)
 		{
 			userSpaceDTOList = new ArrayList<UserSpaceDTO>();
-			for(ChartUserSpace chartUserSpace : chartUserSpaces)
+			for(SimpleUserSpace chartUserSpace : chartUserSpaces)
 			{
 				userSpaceDTOList.add(UserSpaceDTOMapper.toUserSpaceDTO(chartUserSpace));
 			}

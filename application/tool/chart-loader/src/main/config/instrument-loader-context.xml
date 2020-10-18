@@ -36,4 +36,16 @@
 		 -->
 	</bean>
 
+	<bean id="marketReferenceDelegate" class="com.virtualparadigm.fintrader.tool.chartloader.delegate.MarketReferenceDelegateCSVFileImpl">
+		<constructor-arg index="0" value="c:/Users/nickburns/Desktop/market/usb-backup/daily-data-sp" />
+		<constructor-arg index="1" value="table_(\w+)\.csv" />
+		<constructor-arg index="2" value="(w+)" />
+		<constructor-arg index="3" value="(\d+),0,(\d+\.?\d+),(\d+\.?\d+),(\d+\.?\d+),(\d+\.?\d+),(\d+\.?\d+)" />
+		<constructor-arg index="4" ref="csvLineFields" />
+		<constructor-arg index="5" value="yyyyMMdd['T'[HH][:mm][:ss][.SSS]]" />
+		<!-- 
+		<constructor-arg index="5" value="yyyyMMdd" />
+		 -->
+	</bean>
+
 </beans> 

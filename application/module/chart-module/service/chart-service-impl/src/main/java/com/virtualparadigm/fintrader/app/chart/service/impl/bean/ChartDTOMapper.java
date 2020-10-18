@@ -11,7 +11,7 @@ import com.virtualparadigm.fintrader.app.chart.service.api.ChartDTO;
 import com.virtualparadigm.fintrader.app.chart.service.api.ChartDefinitionDTO;
 import com.virtualparadigm.fintrader.app.chart.service.api.ChartVectorDTO;
 import com.virtualparadigm.fintrader.app.chart.service.api.SampleDTOFrequency;
-import com.vparadigm.shared.finance.chart.Chart;
+import com.vparadigm.shared.finance.ts.Chart;
 import com.vparadigm.shared.ts.IDiscreteTimeSeries;
 import com.vparadigm.shared.ts.SampleFrequency;
 
@@ -48,11 +48,11 @@ public class ChartDTOMapper
 	public static ChartDefinitionDTO toChartDefinitionDTO(Chart chart)
 	{
 		ChartDefinitionDTO chartDefinitionDTO = null;
-		if(chart != null && chart.getUserSpace() != null && chart.getGUID() != null)
+		if(chart != null && chart.getChartSpace() != null && chart.getChartSpace().getUserSpace() != null && chart.getGUID() != null)
 		{
 			chartDefinitionDTO = 
 					new ChartDefinitionDTO(
-							chart.getUserSpace().getName(), 
+							chart.getChartSpace().getUserSpace().getName(), 
 							ChartDTOMapper.getSampleDTOFrequency(chart.getSampleFrequency()), 
 							chart.getSymbol(), 
 							chart.getChartName());
